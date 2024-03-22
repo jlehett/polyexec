@@ -1,16 +1,21 @@
 import inquirer from 'inquirer';
 import GUI from './GUI.js';
+import ValueRequest from '../../connection/requests/ValueRequest.js';
 
 class Ask {
 
-    static async forValue({ message, validate, transform }) {
+    static async forValue({ message, validation, transform }) {
+        Ask.#assertGUIInitialized();
+
+        const value = await GUI.sendRequest(ValueRequest.create({ message, validation }));
+
+        return transform ? transform(value) : value;
+    }
+
+    static #assertGUIInitialized() {
         if (!GUI.isInitialized) {
             throw new Error('GUI has not been initialized');
         }
-
-        const { value } = await GUI.sendAskForValue({ message, validate, transform });
-
-        return transform ? transform(value) : value;
     }
 
 }

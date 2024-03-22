@@ -16,24 +16,12 @@ class GUI {
         this.#isInitialized = true;
     }
 
-    sendAskForValue({ message, validate, transform }) {
-        return this.#dataStream.askClientForValue({ message, validate, transform });
+    sendRequest(request) {
+        this.#dataStream.sendRequest(request);
     }
 
-    sendLog({ logKey, message }) {
-        this.#dataStream.sendLog({ logKey, message, type: 'log' });
-    }
-
-    sendError({ logKey, err }) {
-        this.#dataStream.sendLog({ logKey, message: err, type: 'error' });
-    }
-
-    sendProcessComplete({ logKey }) {
-        this.#dataStream.sendLog({ logKey, message: `${logKey} is complete!`, type: 'complete' });
-    }
-
-    sendProcessExitedWithError({ logKey }) {
-        this.#dataStream.sendLog({ logKey, message: `${logKey} exited with error.`, type: 'exitWithError' });
+    sendLog(log) {
+        this.#dataStream.sendLog(log);
     }
 }
 
