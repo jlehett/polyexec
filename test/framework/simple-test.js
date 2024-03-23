@@ -7,7 +7,7 @@ await GUI.init();
 
 const clientName = await Ask.forValue({
     message: 'Enter the name of the client you want to run',
-    validate: (value) => value.length > 3,
+    validation: (value) => value.length > 3,
 });
 
 SerialCommandGroup.create({

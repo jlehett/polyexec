@@ -1,6 +1,4 @@
-import WebSocket, { WebSocketServer } from 'ws';
-import crypto from 'crypto';
-import ValueRequest from '../../connection/requests/ValueRequest.js';
+import { WebSocketServer } from 'ws';
 
 class DataStream {
     constructor(port) {

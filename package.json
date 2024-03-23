@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@psionic/ui": "^1.10.0",
     "inquirer": "^9.2.16",
     "ws": "^8.16.0"
   },

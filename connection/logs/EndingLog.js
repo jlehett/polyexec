@@ -4,6 +4,8 @@ class EndingLog extends Log {
     static type = 'ending-log';
 
     constructor(id) {
+        super();
+
         this.id = id;
     }
 

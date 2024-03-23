@@ -13,7 +13,7 @@ class Log {
 
     toJSON() {
         return {
-            type: Log.type,
+            type: this.constructor.type,
         }
     }
 }

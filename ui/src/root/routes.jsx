@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import InitializeConnection from '@pages/initialize-connection';
 import Dashboard from '@pages/dashboard';
 import App from './app';
 
@@ -9,8 +10,12 @@ export default (
             path='/'
         >
             <Route
-                element={<Dashboard/>}
+                element={<InitializeConnection/>}
                 index
+            />
+            <Route
+                element={<Dashboard/>}
+                path='dashboard'
             />
         </Route>
     </Routes>

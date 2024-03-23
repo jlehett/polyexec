@@ -2,14 +2,11 @@ import WebSocket from 'ws';
 import crypto from 'crypto';
 
 class Request {
-    static type;
+    static type = 'request';
 
-    static create(json) {
-        const request = new Request();
-        request.json = json;
-        request.id = crypto.randomUUID();
-
-        return request;
+    constructor(json) {
+        this.json = json;
+        this.id = crypto.randomUUID();
     }
 
     static createResponse() {
@@ -20,20 +17,24 @@ class Request {
         return new Promise((resolve) => {
             wss.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({ ...this.json, id: this.id, type: Request.type }));
+                    client.send(JSON.stringify({ ...this.json, id: this.id, type: this.constructor.type }));
                 }
 
                 client.on('message', (data) => {
                     try {
                         const { id, type, ...restOfResponse } = JSON.parse(data);
 
-                        if (id === this.id && type === Request.type) {
+                        if (id === this.id && type === this.constructor.type) {
                             resolve(restOfResponse);
                         }
                     } catch {}
                 });
             });
         });
+    }
+
+    static async sendResponse(socket, request, json) {
+        socket.send(JSON.stringify({ ...json, id: request.id, type: request.type }));
     }
 }
 

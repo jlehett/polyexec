@@ -29,7 +29,7 @@ class ConcurrentCommandGroup extends Loggable {
             await Promise.all(this.commands.map(task => {
                 switch (task.constructor) {
                     case Command:
-                        return task.run(cwd, this.id);
+                        return task.runWithCwd(cwd, this.id);
                     case SerialCommandGroup:
                     case ConcurrentCommandGroup:
                         return task.runWithCwd(task.cwd || cwd, this.id);

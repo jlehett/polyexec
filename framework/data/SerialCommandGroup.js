@@ -29,7 +29,7 @@ class SerialCommandGroup extends Loggable {
             for (const task of this.commands) {
                 switch (task.constructor) {
                     case Command:
-                        await task.run(cwd, this.id);
+                        await task.runWithCwd(cwd, this.id);
                         break;
                     case SerialCommandGroup:
                     case ConcurrentCommandGroup:

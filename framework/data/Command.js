@@ -11,12 +11,14 @@ class Command extends Loggable {
         return new Command(commandString);
     }
 
-    async run(cwd, parentID) {
-        this.startLog(parentID);
-
+    async runWithCwd(cwd, parentID) {
         try {
             await new Promise((resolve, reject) => {
                 this.process = spawn(this.commandString, { cwd });
+
+                this.process.stdout.on('data', (data) => {
+                    this.infoLog(parentID, data.toString());
+                });
 
                 this.process.on('close', (code) => {
                     return code === 0 ? resolve() : reject();
@@ -28,8 +30,6 @@ class Command extends Loggable {
             });
         } catch (err) {
 
-        } finally {
-            this.endLog();
         }
     }
 }

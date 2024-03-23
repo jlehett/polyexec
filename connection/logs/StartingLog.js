@@ -4,6 +4,8 @@ class StartingLog extends Log {
     static type = 'starting-log';
 
     constructor(name, id, parentID) {
+        super();
+
         this.name = name;
         this.id = id;
         this.parentID = parentID;

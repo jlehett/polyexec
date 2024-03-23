@@ -7,7 +7,7 @@ class Ask {
     static async forValue({ message, validation, transform }) {
         Ask.#assertGUIInitialized();
 
-        const value = await GUI.sendRequest(ValueRequest.create({ message, validation }));
+        const { value } = await GUI.sendRequest(new ValueRequest({ message, validation }));
 
         return transform ? transform(value) : value;
     }
