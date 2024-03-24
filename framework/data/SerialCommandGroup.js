@@ -19,10 +19,15 @@ class SerialCommandGroup extends Loggable {
             throw new Error('cwd is required for SerialCommandGroup');
         }
 
-        await this.#runWithCwd(this.cwd);
+        try {
+            await this.runWithCwd(this.cwd);
+        } catch (err) {
+            console.log('\x1b[31m%s\x1b[0m', `Error running SerialCommandGroup: ${err}`);
+            console.log('\x1b[31m%s\x1b[0m', 'Halting execution.');
+        }
     }
 
-    async #runWithCwd(cwd, parentID=undefined) {
+    async runWithCwd(cwd, parentID=undefined) {
         this.startLog(parentID);
 
         try {
@@ -37,7 +42,9 @@ class SerialCommandGroup extends Loggable {
                 }
             }
         } catch (err) {
+            this.erroredLog();
 
+            throw err;
         } finally {
             this.endLog();
         }

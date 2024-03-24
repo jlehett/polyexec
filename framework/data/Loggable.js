@@ -3,6 +3,9 @@ import GUI from '../services/GUI.js';
 import StartingLog from '../../connection/logs/StartingLog.js';
 import EndingLog from '../../connection/logs/EndingLog.js';
 import InfoLog from '../../connection/logs/InfoLog.js';
+import ErrorMessageLog from '../../connection/logs/ErrorMessageLog.js';
+import ErroredLog from '../../connection/logs/ErroredLog.js';
+import AsyncErrorLog from '../../connection/logs/AsyncErrorLog.js';
 
 class Loggable {
     id;
@@ -30,6 +33,24 @@ class Loggable {
         this.#assertGUIInitialized();
 
         GUI.sendLog(new InfoLog(parentID, message));
+    }
+
+    errorMessageLog(parentID, error) {
+        this.#assertGUIInitialized();
+
+        GUI.sendLog(new ErrorMessageLog(parentID, error));
+    }
+
+    erroredLog() {
+        this.#assertGUIInitialized();
+
+        GUI.sendLog(new ErroredLog(this.id));
+    }
+
+    asyncErrorLog() {
+        this.#assertGUIInitialized();
+
+        GUI.sendLog(new AsyncErrorLog(this.id));
     }
 
     #assertGUIInitialized() {

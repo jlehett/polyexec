@@ -8,7 +8,7 @@ function Dashboard() {
     useEffect(() => {
         setTimeout(() => {
             MessageRouter.processing = true;
-        }, 1000);
+        }, 200);
     }, []);
 
     return (

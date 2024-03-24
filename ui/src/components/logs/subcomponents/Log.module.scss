@@ -1,0 +1,14 @@
+@import "@styles/colors.scss";
+
+.logWrapper {
+    color: $secondary;
+    word-break: break-word;
+    white-space: break-spaces;
+}
+
+.errorMessageLog {
+
+    span {
+        color: $error;
+    }
+}

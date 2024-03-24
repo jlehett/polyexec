@@ -1,3 +1,4 @@
+import ConcurrentCommandGroup from '../../framework/data/ConcurrentCommandGroup.js';
 import SerialCommandGroup from '../../framework/data/SerialCommandGroup.js';
 import Ask from '../../framework/services/Ask.js';
 import GUI from '../../framework/services/GUI.js';
@@ -10,12 +11,37 @@ const clientName = await Ask.forValue({
     validation: (value) => value.length > 3,
 });
 
-SerialCommandGroup.create({
-    name: 'Run Client',
+ConcurrentCommandGroup.create({
+    name: 'Run All Clients',
     cwd: 'C:\\Users\\johnt',
     commands: [
-        Command.create(`dir`),
-        Command.create(`dir`),
-        Command.create(`dir`),
-    ],
+        SerialCommandGroup.create({
+            name: 'Run Web Client',
+            commands: [
+                Command.create(`dir`),
+                Command.create(`dir`),
+            ]
+        }),
+        SerialCommandGroup.create({
+            name: 'Run Mobile Client',
+            commands: [
+                Command.create(`dir`),
+                Command.create(`dir`),
+                SerialCommandGroup.create({
+                    name: 'Run Android Client',
+                    commands: [
+                        Command.create(`echo ${clientName}`),
+                        Command.create(`dir`),
+                    ]
+                })
+            ]
+        }),
+        SerialCommandGroup.create({
+            name: 'Run Desktop Client',
+            commands: [
+                Command.create(`dir`),
+                Command.create(`dir`),
+            ]
+        }),
+    ]
 }).run();

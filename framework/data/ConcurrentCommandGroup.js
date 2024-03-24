@@ -19,10 +19,15 @@ class ConcurrentCommandGroup extends Loggable {
             throw new Error('cwd is required for ConcurrentCommandGroup');
         }
 
-        await this.#runWithCwd(this.cwd);
+        try {
+            await this.runWithCwd(this.cwd);
+        } catch (err) {
+            console.log('\x1b[31m%s\x1b[0m', `Error running ConcurrentCommandGroup: ${err}`);
+            console.log('\x1b[31m%s\x1b[0m', 'Halting execution.');
+        }
     }
 
-    async #runWithCwd(cwd, parentID=undefined) {
+    async runWithCwd(cwd, parentID=undefined) {
         this.startLog(parentID);
 
         try {
@@ -36,7 +41,9 @@ class ConcurrentCommandGroup extends Loggable {
                 }
             }));
         } catch (err) {
+            this.asyncErrorLog();
 
+            throw err;
         } finally {
             this.endLog();
         }

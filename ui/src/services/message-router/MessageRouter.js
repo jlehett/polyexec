@@ -21,6 +21,8 @@ class MessageRouter {
     receive(message) {
         const data = JSON.parse(message.data);
 
+        console.log('Message received:', data);
+
         this.messageQueue.enqueue(data);
 
         emit(this.EVENTS.MESSAGE_RECEIVED, data);
@@ -48,8 +50,6 @@ class MessageRouter {
         }
 
         const message = this.messageQueue.dequeue();
-
-        console.log('From queue:', message);
 
         switch (message.superType) {
             case Log.superType:

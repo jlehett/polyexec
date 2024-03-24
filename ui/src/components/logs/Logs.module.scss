@@ -1,0 +1,38 @@
+@import "@styles/colors.scss";
+
+$padding: 8px 16px;
+$border-radius: 0.375rem;
+
+@mixin borderStyle {
+    border-width: 1px;
+    border-style: solid;
+    border-color: $border-color;
+}
+
+.logsCard {
+    background: $background;
+
+    & > header {
+        @include borderStyle;
+
+        padding: $padding;
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
+        background: $background--100;
+
+        h1 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+    }
+
+    .content {
+        @include borderStyle;
+
+        padding: $padding;
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+        background: $background;
+        border-top: none;
+    }
+}

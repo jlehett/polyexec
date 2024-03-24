@@ -1,0 +1,40 @@
+
+.logGroup {
+
+    header {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+
+        h1 {
+            font-size: 16px;
+            font-weight: 600;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .left {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            align-items: center;
+        }
+    }
+
+    .groupLogsContainer {
+        padding-left: 22px;
+        margin-left: 10px;
+        border-left: 1px solid #30363d;
+    }
+
+    .childLogsContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 8px;
+    }
+}

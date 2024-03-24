@@ -25,11 +25,13 @@ class Command extends Loggable {
                 });
 
                 this.process.on('error', (err) => {
-                    reject();
+                    reject(err);
                 });
             });
         } catch (err) {
+            this.errorMessageLog(parentID, err);
 
+            throw err;
         }
     }
 }

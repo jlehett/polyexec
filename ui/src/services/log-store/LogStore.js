@@ -1,3 +1,4 @@
+import StartingLog from '../../../../connection/logs/StartingLog';
 import { emit } from '@psionic/emit';
 
 class LogStore {
@@ -14,7 +15,7 @@ class LogStore {
     add(log) {
         this.allLogs.push(log);
 
-        if (log.type === 'Starting') {
+        if (log.type === StartingLog.type) {
             const { name } = log;
             this.#updateGroupInfo(log.id, { name });
         }
@@ -22,8 +23,8 @@ class LogStore {
         emit(this.EVENTS.LOG_ADDED, log);
     }
 
-    getGroupInfo(log) {
-        return this.groupsInfo.has(log.id) ? this.groupsInfo.get(log.id) : this.groupsInfo.get(log.parentID);
+    getGroupInfo({ id, parentID }) {
+        return this.groupsInfo.has(id) ? this.groupsInfo.get(id) : this.groupsInfo.get(parentID);
     }
 
     #updateGroupInfo(id, info) {
