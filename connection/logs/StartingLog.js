@@ -1,7 +1,7 @@
 import Log from '../Log.js';
 
 class StartingLog extends Log {
-    static type = 'starting-log';
+    static type = 'starting';
 
     constructor(name, id, parentID) {
         super();

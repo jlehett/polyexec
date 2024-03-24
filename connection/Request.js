@@ -2,7 +2,8 @@ import WebSocket from 'ws';
 import crypto from 'crypto';
 
 class Request {
-    static type = 'request';
+    static superType = 'request';
+    static type;
 
     constructor(json) {
         this.json = json;
@@ -17,7 +18,7 @@ class Request {
         return new Promise((resolve) => {
             wss.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify({ ...this.json, id: this.id, type: this.constructor.type }));
+                    client.send(JSON.stringify({ ...this.json, id: this.id, type: this.constructor.type, superType: Request.superType }));
                 }
 
                 client.on('message', (data) => {
@@ -33,8 +34,8 @@ class Request {
         });
     }
 
-    static async sendResponse(socket, request, json) {
-        socket.send(JSON.stringify({ ...json, id: request.id, type: request.type }));
+    static constructResponse(request, response) {
+        return { ...response, id: request.id, type: request.type };
     }
 }
 

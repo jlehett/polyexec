@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 
 class Log {
+    static superType = 'log';
     static type;
 
     send(wss) {
@@ -14,7 +15,8 @@ class Log {
     toJSON() {
         return {
             type: this.constructor.type,
-        }
+            superType: Log.superType,
+        };
     }
 }
 

@@ -13,8 +13,8 @@ class ValueRequest extends Request {
         return response.value;
     }
 
-    static async sendResponse(socket, request, { value }) {
-        super.sendResponse(socket, request, { value });
+    static constructResponse(request, { value }) {
+        return super.constructResponse(request, { value });
     }
 
     static validateValue(validationFnString, value) {

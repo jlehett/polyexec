@@ -1,7 +1,7 @@
 import Log from '../Log.js';
 
 class InfoLog extends Log {
-    static type = 'info-log';
+    static type = 'info';
 
     constructor(parentID, message) {
         super();

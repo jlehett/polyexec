@@ -1,7 +1,7 @@
 import Log from '../Log.js';
 
 class EndingLog extends Log {
-    static type = 'ending-log';
+    static type = 'ending';
 
     constructor(id) {
         super();

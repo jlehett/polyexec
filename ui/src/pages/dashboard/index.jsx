@@ -1,12 +1,20 @@
+import { useEffect } from 'react';
 import localStyles from './dashboard.module.scss';
+import MessageRouter from '@services/message-router/MessageRouter';
+import RequestHandler from '@components/request-handler/RequestHandler';
+import Logs from '@components/logs/Logs';
 
 function Dashboard() {
+    useEffect(() => {
+        setTimeout(() => {
+            MessageRouter.processing = true;
+        }, 1000);
+    }, []);
+
     return (
         <div className={localStyles.page}>
-            <h1>Home</h1>
-            <p>
-                Home, sweet home. It's wonderful, ain't it?
-            </p>
+            <RequestHandler/>
+            <Logs/>
         </div>
     );
 }

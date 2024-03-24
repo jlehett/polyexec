@@ -14,11 +14,9 @@ const createWindow = () => {
     },
   });
 
-  if (process.env.NODE_ENV === "development") {
-    win.loadURL("http://localhost:6969/");
-  } else {
-    win.loadFile(join(__dirname, "./dist/index.html"));
-  }
+  win.loadURL("http://localhost:6969/");
+
+  win.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {

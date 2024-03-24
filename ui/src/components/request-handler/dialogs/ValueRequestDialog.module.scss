@@ -1,0 +1,21 @@
+
+.dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input {
+
+    p {
+        color: rgb(255, 143, 143) !important;
+    }
+}
+
+.footer {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: flex-end;
+    width: 100%;
+}

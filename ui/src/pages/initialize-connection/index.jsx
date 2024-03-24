@@ -1,10 +1,26 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useOnEmit } from '@psionic/emit-react';
 import {
     DrawLoader,
     BouncingText,
 } from '@psionic/ui';
+import Connection from '@services/connection/Connection';
 import localStyles from './initialize-connection.module.scss';
 
 function InitializeConnection() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        Connection.connect();
+    }, []);
+
+    useOnEmit(
+        Connection.EVENTS.CONNECTED,
+        () => navigate('/dashboard')
+    );
+
     return (
         <div className={localStyles.page}>
             <DrawLoader
@@ -21,13 +37,16 @@ function InitializeConnection() {
                 }}
                 color="#4fc930"
             />
-            <p>Initializing connection</p>
-            <BouncingText
-                lines={['...']}
-                waveGranularity={0.5}
-                amplitude={4}
-                bounceSpeed={0.75}
-            />
+            <div className={localStyles.spacer}/>
+            <span>
+                <p>Initializing connection</p>
+                <BouncingText
+                    lines={['...']}
+                    waveGranularity={0.5}
+                    amplitude={4}
+                    bounceSpeed={0.75}
+                />
+            </span>
         </div>
     );
 }
