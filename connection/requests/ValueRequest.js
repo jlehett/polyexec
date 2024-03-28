@@ -4,7 +4,7 @@ class ValueRequest extends Request {
     static type = 'value-request';
 
     constructor({ message, validation }) {
-        super({ message, validation: validation.toString() });
+        super({ message, validation: validation?.toString?.() });
     }
 
     async send(wss) {
@@ -18,6 +18,10 @@ class ValueRequest extends Request {
     }
 
     static validateValue(validationFnString, value) {
+        if (!validationFnString) {
+            return true;
+        }
+
         const validationFn = eval(`(${validationFnString})`);
 
         return validationFn(value);

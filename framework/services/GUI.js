@@ -29,6 +29,10 @@ class GUI {
         this.#dataStream.sendLog(log);
     }
 
+    sendConfigVarUsage(configVar) {
+        this.#dataStream.sendConfigVarUsage(configVar);
+    }
+
     #startElectronApp() {
         console.log('\x1b[37m\x1b[1m%s\x1b[0m', '\nStarting GUI...\n');
 

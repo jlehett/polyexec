@@ -1,8 +1,21 @@
 @import "@styles/colors.scss";
 
 .page {
+    display: grid;
+    grid-template-columns: 60% auto;
+    gap: 16px;
 
     p {
         color: $secondary;
     }
+}
+
+.leftSide {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.rightSide {
+
 }

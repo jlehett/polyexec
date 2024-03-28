@@ -1,4 +1,6 @@
+import path from 'path';
 import Json from '../services/Json.js';
+import ConfigVar from './ConfigVar.js';
 
 class Config {
     constructor(configPath) {

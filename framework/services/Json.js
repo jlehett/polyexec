@@ -3,8 +3,11 @@ import fs from 'fs';
 class Json {
 
     static async get(path) {
-        const data = await import(path, { assert: { type: 'json' } });
-        return data.default;
+        if (!fs.existsSync(path)) {
+            fs.writeFileSync(path, '{}');
+        }
+
+        return JSON.parse(fs.readFileSync(path, 'utf8'));
     }
 
     static set(path, data) {

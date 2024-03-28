@@ -1,7 +1,11 @@
 import Ask from '../services/Ask.js';
+import GUI from '../services/GUI.js';
+import StandardConfigVar from '../../connection/config-vars/StandardConfigVar.js';
 
 class ConfigVar {
     constructor(config, { key, related, message, validate, transform }) {
+        this.config = config;
+
         this.key = key;
         this.related = related;
         this.message = message;
@@ -21,6 +25,8 @@ class ConfigVar {
 
             await this.set(value);
         }
+
+        this.#sendStandardConfigVarUsage(value);
 
         return value;
     }
@@ -49,6 +55,18 @@ class ConfigVar {
         }
 
         await this.config.set(configJson);
+    }
+
+    #sendStandardConfigVarUsage(value) {
+        this.#assertGUIInitialized();
+
+        GUI.sendLog(new StandardConfigVar(this.key, value));
+    }
+
+    #assertGUIInitialized() {
+        if (!GUI.isInitialized) {
+            throw new Error('GUI has not been initialized');
+        }
     }
 }
 

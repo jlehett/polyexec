@@ -5,6 +5,7 @@ import routes from '@root/routes';
 
 import '@styles/defaults.scss';
 import '@styles/typography.scss';
+import '@styles/common.scss';
 
 const container = document.getElementById('root');
 const root = createRoot(container);

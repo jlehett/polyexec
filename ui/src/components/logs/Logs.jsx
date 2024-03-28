@@ -7,7 +7,9 @@ import localStyles from './Logs.module.scss';
 
 //#region Main Component
 
-function Logs() {
+function Logs({
+    maxHeight,
+}) {
     const rootLogs = useRootLogs();
 
     function renderRootLogs() {
@@ -25,11 +27,11 @@ function Logs() {
     }
 
     return (
-        <div className={localStyles.logsCard}>
+        <div className="card">
             <header>
                 <h1>Logs</h1>
             </header>
-            <div className={localStyles.content}>
+            <div className="content" style={{ maxHeight }}>
                 <div className={localStyles.rootLogsContainer}>
                     {renderRootLogs()}
                 </div>

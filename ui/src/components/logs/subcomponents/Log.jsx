@@ -1,3 +1,5 @@
+import InfoLog from '../../../../../connection/logs/InfoLog';
+import ErrorMessageLog from '../../../../../connection/logs/ErrorMessageLog';
 import localStyles from './Log.module.scss';
 
 //#region Main Component
@@ -8,10 +10,10 @@ function Log({
 
     function renderLog() {
         switch (log.type) {
-            case 'info':
-                return <InfoLog log={log}/>;
-            case 'error-message':
-                return <ErrorMessageLog log={log}/>;
+            case InfoLog.type:
+                return <InfoLogUI log={log}/>;
+            case ErrorMessageLog.type:
+                return <ErrorMessageLogUI log={log}/>;
             default:
                 return null;
         }
@@ -30,7 +32,7 @@ export default Log;
 
 //#region Helper Components
 
-function InfoLog({
+function InfoLogUI({
     log,
 }) {
     return (
@@ -40,7 +42,7 @@ function InfoLog({
     );
 }
 
-function ErrorMessageLog({
+function ErrorMessageLogUI({
     log,
 }) {
     return (

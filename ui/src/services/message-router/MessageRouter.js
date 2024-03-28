@@ -2,8 +2,10 @@ import { emit } from '@psionic/emit';
 import Queue from '../../data/Queue';
 import Request from '../../../../connection/Request';
 import Log from '../../../../connection/Log';
+import ConfigVar from '../../../../connection/ConfigVar';
 import RequestHandler from '../request-handler/RequestHandler';
 import LogStore from '../log-store/LogStore';
+import ConfigVarStore from '../config-var-store/ConfigVarStore';
 
 class MessageRouter {
 
@@ -20,8 +22,6 @@ class MessageRouter {
 
     receive(message) {
         const data = JSON.parse(message.data);
-
-        console.log('Message received:', data);
 
         this.messageQueue.enqueue(data);
 
@@ -58,7 +58,11 @@ class MessageRouter {
             case Request.superType:
                 RequestHandler.receive(message);
                 break;
+            case ConfigVar.superType:
+                ConfigVarStore.add(message);
+                break;
             default:
+                console.log('Unknown message type', message);
                 break;
         }
     }

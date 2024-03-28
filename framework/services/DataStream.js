@@ -28,6 +28,10 @@ class DataStream {
     async sendRequest(request) {
         return request.send(this.wss);
     }
+
+    sendConfigVarUsage(configVar) {
+        configVar.send(this.wss);
+    }
 }
 
 export default DataStream;

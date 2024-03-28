@@ -5,7 +5,7 @@ class LogStore {
 
     EVENTS = {
         LOG_ADDED: 'log-added',
-    }
+    };
 
     constructor() {
         this.allLogs = [];
