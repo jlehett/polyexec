@@ -1,4 +1,3 @@
-import inquirer from 'inquirer';
 import GUI from './GUI.js';
 import ValueRequest from '../../connection/requests/ValueRequest.js';
 

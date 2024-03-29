@@ -1,12 +1,13 @@
 import Command from './Command.js';
 import ConcurrentCommandGroup from './ConcurrentCommandGroup.js';
 import Loggable from './Loggable.js';
+import PathParser from '../services/PathParser.js';
 
 class SerialCommandGroup extends Loggable {
     constructor({ commands, cwd, name }) {
         super(name);
 
-        this.cwd = cwd;
+        this.cwd = PathParser.parse(cwd);
         this.commands = commands;
     }
 
