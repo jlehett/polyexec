@@ -14,7 +14,7 @@ class Command extends Loggable {
     async runWithCwd(cwd, parentID) {
         try {
             await new Promise((resolve, reject) => {
-                this.process = spawn(this.commandString, { cwd });
+                this.process = spawn(this.commandString, { cwd, shell: true });
 
                 this.process.stdout.on('data', (data) => {
                     this.infoLog(parentID, data.toString());
