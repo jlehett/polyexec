@@ -11,12 +11,25 @@ class GUI {
         return this.#isInitialized;
     }
 
-    async init() {
-        this.#dataStream = DataStream.init();
+    async init(
+        {
+            port = 21734,
+        } = {}
+    ) {
+        const portToUse = await DataStream.getFirstAvailablePort(port)
+            .catch((err) => {
+                console.log('\n\x1b[31m%s\x1b[0m', `No available port found.`);
+                console.log('\x1b[31m%s\x1b[0m', 'Halting execution.');
+                process.exit(1);
+            });
 
-        this.#startElectronApp();
+        this.#dataStream = DataStream.init({ port: portToUse });
+
+        this.#startElectronApp(portToUse);
 
         await this.#dataStream.waitForConnection();
+
+        console.log('\x1b[32m%s\x1b[0m', 'GUI and script connection established.\n');
 
         this.#isInitialized = true;
     }
@@ -33,13 +46,14 @@ class GUI {
         this.#dataStream.sendConfigVarUsage(configVar);
     }
 
-    #startElectronApp() {
+    #startElectronApp(port) {
         console.log('\x1b[37m\x1b[1m%s\x1b[0m', '\nStarting GUI...\n');
 
         const autoscriptMainDir = path.join(fileURLToPath(import.meta.url), '../../../');
 
         const electronApp = spawn('npm', ['start'], {
             cwd: autoscriptMainDir,
+            env: { ...process.env, CONNECTION_PORT: port },
             shell: true
         });
 

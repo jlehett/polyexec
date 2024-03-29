@@ -62,7 +62,7 @@ function useRootLogs() {
             return;
         }
 
-        setRootLogsByID(new Map(rootLogsByID).set(log.id, log));
+        setRootLogsByID((prevMap) => new Map(prevMap).set(log.id, log));
     });
 
     return Array.from(rootLogsByID.values());

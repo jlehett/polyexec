@@ -8,8 +8,8 @@ class Connection {
         CONNECTED: 'connected',
     };
 
-    async connect(port=8080) {
-        this.socket = new WebSocket(`ws://localhost:${port}`);
+    async connect() {
+        this.socket = new WebSocket(`ws://localhost:${window.ports.connection}`);
 
         this.socket.onopen = () => {
             emit(this.EVENTS.CONNECTED);

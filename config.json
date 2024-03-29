@@ -1,7 +1,6 @@
 {
-  "clientProxyDirPath": "something-path",
+  "clientProxyDirPath": "test-path",
   "clientDirPath": {
-    "risks-client": "another-path",
     "test": "test-path"
   }
 }

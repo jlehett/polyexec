@@ -1,13 +1,14 @@
 {
   "name": "autoscript",
   "type": "module",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "scripts": {
     "install-ui": "cd ui && npm install --legacy-peer-deps",
-    "start": "cd ui && npm run dev"
+    "start": "cd ui && npm run dev",
+    "postinstall": "npm run install-ui"
   },
-  "author": "",
+  "author": "Tanner Lehett <johntannerlehett@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@psionic/emit": "^0.0.2",
