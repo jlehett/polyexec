@@ -4,3 +4,8 @@ node_modules
 
 test/
 ui/node_modules/
+ui/package-lock.json
+ui/src
+ui/public
+ui/index.html
+ui/vite.config.js

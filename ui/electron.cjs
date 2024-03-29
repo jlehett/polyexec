@@ -1,9 +1,6 @@
-const path = require("path");
-process.env.NODE_PATH = path.join(__dirname, 'ui', 'node_modules');
-require('module').Module._initPaths();
-
 const { app, BrowserWindow } = require("electron");
 const fs = require('fs');
+const path = require('path');
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -18,11 +15,8 @@ const createWindow = () => {
     },
   });
 
-  // Read the port from the file
-  const port = fs.readFileSync(path.resolve(__dirname, 'vite-port.txt'), 'utf8');
-
   // Load the Vite app using the port
-  win.loadURL(`http://localhost:${port}`);
+  win.loadURL(`http://localhost:${process.env.VITE_PORT}`);
 
 //   win.webContents.openDevTools();
 };

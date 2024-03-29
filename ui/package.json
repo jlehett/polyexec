@@ -7,13 +7,9 @@
   "type": "module",
   "main": "electron.cjs",
   "scripts": {
-    "dev": "rimraf vite-port.txt && cross-env NODE_ENV=development concurrently \"npm:serve\" \"npm:electron\"",
-    "prod": "npm run build && npm run electron-build",
-    "serve": "vite",
+    "start-gui": "node start-gui.js",
     "build": "cross-env NODE_ENV=production vite build",
-    "preview": "vite preview",
-    "electron": "wait-on vite-port.txt && electron .",
-    "electron-build": "cross-env NODE_ENV=production electron-builder"
+    "preview": "vite preview"
   },
   "build": {
     "appId": "electron-react-vite",
