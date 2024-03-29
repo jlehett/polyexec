@@ -1,5 +1,8 @@
-const { app, BrowserWindow } = require("electron");
 const path = require("path");
+process.env.NODE_PATH = path.join(__dirname, 'ui', 'node_modules');
+require('module').Module._initPaths();
+
+const { app, BrowserWindow } = require("electron");
 const fs = require('fs');
 
 const createWindow = () => {
