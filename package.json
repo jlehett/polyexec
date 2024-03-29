@@ -7,9 +7,7 @@
   "license": "ISC",
   "main": "framework/index.js",
   "scripts": {
-    "install-ui": "cd ui && npm install --omit dev",
     "start": "cd ui && npm run start-gui",
-    "postinstall": "npm run install-ui",
     "prepare": "cd ui && npm run build"
   },
   "dependencies": {
