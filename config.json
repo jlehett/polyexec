@@ -1,6 +1,0 @@
-{
-  "clientProxyDirPath": "test-path",
-  "clientDirPath": {
-    "test": "test-path"
-  }
-}

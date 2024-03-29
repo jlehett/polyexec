@@ -3,13 +3,14 @@
   "type": "module",
   "version": "0.0.1",
   "description": "",
+  "author": "Tanner Lehett <johntannerlehett@gmail.com>",
+  "license": "ISC",
+  "main": "framework/index.js",
   "scripts": {
     "install-ui": "cd ui && npm install --legacy-peer-deps",
     "start": "cd ui && npm run dev",
     "postinstall": "npm run install-ui"
   },
-  "author": "Tanner Lehett <johntannerlehett@gmail.com>",
-  "license": "ISC",
   "dependencies": {
     "@psionic/emit": "^0.0.2",
     "@psionic/emit-react": "^0.0.3",
