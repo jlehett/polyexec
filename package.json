@@ -13,7 +13,9 @@
     "prepare": "cd ui && npm run build"
   },
   "dependencies": {
-    "ws": "^8.16.0"
+    "ws": "^8.16.0",
+    "electron": "^24.3.1",
+    "vite": "^4.3.2"
   },
   "devDependencies": {
     "prompt-sync": "^4.2.0"
