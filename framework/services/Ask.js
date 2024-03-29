@@ -4,10 +4,10 @@ import ValueRequest from '../../connection/requests/ValueRequest.js';
 
 class Ask {
 
-    static async forValue({ message, validation, transform }) {
+    static async forValue({ message, validate, transform }) {
         Ask.#assertGUIInitialized();
 
-        const value = await GUI.sendRequest(new ValueRequest({ message, validation }));
+        const value = await GUI.sendRequest(new ValueRequest({ message, validate }));
 
         return transform ? transform(value) : value;
     }

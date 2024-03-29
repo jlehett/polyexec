@@ -9,7 +9,7 @@ class ConfigVar {
         this.key = key;
         this.related = related;
         this.message = message;
-        this.validation = validate;
+        this.validate = validate;
         this.transform = transform;
     }
 

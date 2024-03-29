@@ -16,7 +16,7 @@ function ValueRequestDialog({
 }) {
 
     function validate(newValue) {
-        return ValueRequest.validateValue(request.validation, newValue)
+        return ValueRequest.validateValue(request.validate, newValue)
             ? null
             : 'Did not pass validation check';
     }

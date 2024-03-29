@@ -3,8 +3,8 @@ import Request from '../Request.js';
 class ValueRequest extends Request {
     static type = 'value-request';
 
-    constructor({ message, validation }) {
-        super({ message, validation: validation?.toString?.() });
+    constructor({ message, validate }) {
+        super({ message, validate: validate?.toString?.() });
     }
 
     async send(wss) {
@@ -17,14 +17,14 @@ class ValueRequest extends Request {
         return super.constructResponse(request, { value });
     }
 
-    static validateValue(validationFnString, value) {
-        if (!validationFnString) {
+    static validateValue(validateFnString, value) {
+        if (!validateFnString) {
             return true;
         }
 
-        const validationFn = eval(`(${validationFnString})`);
+        const validateFn = eval(`(${validateFnString})`);
 
-        return validationFn(value);
+        return validateFn(value);
     }
 }
 
