@@ -58,11 +58,11 @@ class GUI {
         });
 
         electronApp.stdout.on('data', (data) => {
-            if (data.includes('ready in')) {
+            if (data.includes('Electron process started')) {
                 console.log('\x1b[32m%s\x1b[0m', 'GUI window opened. Please wait for your script to finish before closing the GUI window.\n');
             }
 
-            if (data.includes('electron exited')) {
+            if (data.includes('electron process exited')) {
                 console.log('\x1b[31m%s\x1b[0m', 'GUI window closed; exiting process.\n');
                 process.exit(1);
             }
