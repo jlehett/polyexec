@@ -49,10 +49,10 @@ class GUI {
     #startElectronApp(port) {
         console.log('\x1b[37m\x1b[1m%s\x1b[0m', '\nStarting GUI...\n');
 
-        const autoscriptMainDir = path.join(fileURLToPath(import.meta.url), '../../../');
+        const polyexecMainDir = path.join(fileURLToPath(import.meta.url), '../../../');
 
         const electronApp = spawn('npm', ['start'], {
-            cwd: autoscriptMainDir,
+            cwd: polyexecMainDir,
             env: { ...process.env, CONNECTION_PORT: port },
             shell: true
         });
