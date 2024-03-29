@@ -7,12 +7,12 @@
   "type": "module",
   "main": "electron.cjs",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development concurrently \"npm:serve\" \"npm:electron\"",
+    "dev": "rimraf vite-port.txt && cross-env NODE_ENV=development concurrently \"npm:serve\" \"npm:electron\"",
     "prod": "npm run build && npm run electron-build",
     "serve": "vite",
     "build": "cross-env NODE_ENV=production vite build",
     "preview": "vite preview",
-    "electron": "wait-on tcp:6969 && electron .",
+    "electron": "wait-on vite-port.txt && electron .",
     "electron-build": "cross-env NODE_ENV=production electron-builder"
   },
   "build": {
@@ -43,14 +43,14 @@
     ]
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3",
-    "sass": "^1.71.1",
     "@psionic/emit": "^0.0.2",
     "@psionic/emit-react": "^0.0.3",
     "@psionic/ui": "^1.10.0",
     "framer-motion": "^11.0.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "sass": "^1.71.1",
     "vite-plugin-svgr": "^4.2.0"
   },
   "devDependencies": {
