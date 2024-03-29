@@ -12,12 +12,7 @@
     "postinstall": "npm run install-ui"
   },
   "dependencies": {
-    "@psionic/emit": "^0.0.2",
-    "@psionic/emit-react": "^0.0.3",
-    "@psionic/ui": "^1.10.0",
-    "framer-motion": "^11.0.20",
     "inquirer": "^9.2.16",
-    "vite-plugin-svgr": "^4.2.0",
     "ws": "^8.16.0"
   },
   "devDependencies": {
