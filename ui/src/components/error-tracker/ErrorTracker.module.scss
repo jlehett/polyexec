@@ -11,8 +11,9 @@
     span {
         color: $error;
     }
+}
 
-    .groupName {
-        font-weight: 600;
-    }
+.groupName {
+    color: $error;
+    font-weight: bold;
 }

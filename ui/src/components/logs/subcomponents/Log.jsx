@@ -1,5 +1,6 @@
 import InfoLog from '../../../../../connection/logs/InfoLog';
 import ErrorMessageLog from '../../../../../connection/logs/ErrorMessageLog';
+import SysCallErrorLog from '../../../../../connection/logs/SysCallErrorLog';
 import localStyles from './Log.module.scss';
 
 //#region Main Component
@@ -14,6 +15,8 @@ function Log({
                 return <InfoLogUI log={log}/>;
             case ErrorMessageLog.type:
                 return <ErrorMessageLogUI log={log}/>;
+            case SysCallErrorLog.type:
+                return <SysCallErrorLogUI log={log}/>;
             default:
                 return null;
         }
@@ -47,6 +50,20 @@ function ErrorMessageLogUI({
 }) {
     return (
         <p className={localStyles.errorMessageLog}>
+            {log.errorMessage && (
+                <span className={localStyles.errorMessage}>
+                    {log.errorMessage}
+                </span>
+            )}
+        </p>
+    );
+}
+
+function SysCallErrorLogUI({
+    log,
+}) {
+    return (
+        <p className={localStyles.sysCallErrorLog}>
             {log.error.code && (
                 <span className={localStyles.errorCode}>
                     [{log.error.code}]{' '}

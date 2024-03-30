@@ -3,6 +3,7 @@ import { useOnEmit } from '@psionic/emit-react';
 import ErrorMessageLog from '../../../../connection/logs/ErrorMessageLog';
 import LogStore from '@services/log-store/LogStore';
 import localStyles from './ErrorTracker.module.scss';
+import SysCallErrorLog from '../../../../connection/logs/SysCallErrorLog';
 
 //#region Main Component
 
@@ -20,34 +21,40 @@ function ErrorTracker({
             );
         }
 
+        let lastHeader;
+
         return errorLogs.map((errorLog, errorLogIndex) => {
             const groupInfo = LogStore.getGroupInfo(errorLog);
 
-            return (
-                <p className={localStyles.errorLog} key={errorLogIndex}>
-                    {
-                        groupInfo?.name && (
-                            <span className={localStyles.groupName}>
-                                [{groupInfo.name}]{' '}
-                            </span>
-                        )
-                    }
-                    {
-                        errorLog.error.code && (
-                            <span>
-                                [{errorLog.error.code}]{' '}
-                            </span>
-                        )
-                    }
-                    {
-                        errorLog.error.syscall && (
-                            <span>
-                                {errorLog.error.syscall}
-                            </span>
-                        )
-                    }
-                </p>
-            );
+            const Wrapper = lastHeader !== groupInfo?.name
+                ? ({ children }) => {
+                    return (
+                        <>
+                            <span className={localStyles.groupName}>[{groupInfo?.name}]</span>
+                            {children}
+                        </>
+                    );
+                }
+                : ({ children }) => children;
+
+            lastHeader = groupInfo?.name;
+
+            switch (errorLog.type) {
+                case ErrorMessageLog.type:
+                    return (
+                        <Wrapper key={errorLogIndex}>
+                            <ErrorMessageLogUI log={errorLog}/>
+                        </Wrapper>
+                    );
+                case SysCallErrorLog.type:
+                    return (
+                        <Wrapper key={errorLogIndex}>
+                            <SysCallErrorLogUI log={errorLog}/>
+                        </Wrapper>
+                    );
+                default:
+                    return null;
+            }
         });
     }
 
@@ -75,12 +82,55 @@ function useErrorLogs() {
     const [errorLogs, setErrorLogs] = useState([]);
 
     useOnEmit(LogStore.EVENTS.LOG_ADDED, (log) => {
-        if (log.type === ErrorMessageLog.type) {
+        if ([ErrorMessageLog.type, SysCallErrorLog.type].includes(log.type)) {
             setErrorLogs((errorLogs) => [...errorLogs, log]);
         }
     });
 
     return errorLogs;
+}
+
+//#endregion
+
+//#region Helper Components
+
+function ErrorMessageLogUI({
+    log,
+}) {
+    return (
+        <p className={localStyles.errorLog}>
+            {
+                log.errorMessage && (
+                    <span className={localStyles.errorMessage}>
+                        {log.errorMessage}
+                    </span>
+                )
+            }
+        </p>
+    );
+}
+
+function SysCallErrorLogUI({
+    log,
+}) {
+    return (
+        <p className={localStyles.errorLog}>
+            {
+                log.error.code && (
+                    <span>
+                        [{log.error.code}]{' '}
+                    </span>
+                )
+            }
+            {
+                log.error.syscall && (
+                    <span>
+                        {log.error.syscall}
+                    </span>
+                )
+            }
+        </p>
+    );
 }
 
 //#endregion

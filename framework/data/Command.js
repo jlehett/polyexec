@@ -1,5 +1,5 @@
-import { spawn } from 'child_process';
 import Loggable from './Loggable.js';
+import ProcessManager from '../services/ProcessManager.js';
 
 class Command extends Loggable {
     constructor(commandString) {
@@ -14,22 +14,31 @@ class Command extends Loggable {
     async runWithCwd(cwd, parentID) {
         try {
             await new Promise((resolve, reject) => {
-                this.process = spawn(this.commandString, { cwd, shell: true });
+                this.process = ProcessManager.spawn(this.commandString, { cwd, shell: true });
+
+                this.infoLog(parentID, `>> ${this.commandString}`);
 
                 this.process.stdout.on('data', (data) => {
                     this.infoLog(parentID, data.toString());
                 });
 
+                this.process.stderr.on('data', (data) => {
+                    this.errorMessageLog(parentID, data.toString());
+                });
+
                 this.process.on('close', (code) => {
-                    return code === 0 ? resolve() : reject();
+                    code === 0 ? resolve() : reject(new Error(`Command exited with code ${code}`));
                 });
 
                 this.process.on('error', (err) => {
+                    console.log('Error:', err, this.commandString);
                     reject(err);
                 });
+
+
             });
         } catch (err) {
-            this.errorMessageLog(parentID, err);
+            this.sysCallErrorLog(parentID, err);
 
             throw err;
         }

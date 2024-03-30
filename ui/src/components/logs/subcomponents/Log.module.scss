@@ -6,7 +6,8 @@
     white-space: break-spaces;
 }
 
-.errorMessageLog {
+.errorMessageLog,
+.sysCallErrorLog {
 
     span {
         color: $error;

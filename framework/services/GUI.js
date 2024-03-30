@@ -1,7 +1,7 @@
-import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import DataStream from './DataStream.js';
+import ProcessManager from './ProcessManager.js';
 
 class GUI {
     #isInitialized = false;
@@ -51,10 +51,10 @@ class GUI {
 
         const polyexecMainDir = path.join(fileURLToPath(import.meta.url), '../../../');
 
-        const electronApp = spawn('npm', ['start'], {
+        const electronApp = ProcessManager.spawn('npm start', {
             cwd: polyexecMainDir,
             env: { ...process.env, CONNECTION_PORT: port },
-            shell: true
+            shell: true,
         });
 
         electronApp.stdout.on('data', (data) => {

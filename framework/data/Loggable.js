@@ -6,6 +6,7 @@ import InfoLog from '../../connection/logs/InfoLog.js';
 import ErrorMessageLog from '../../connection/logs/ErrorMessageLog.js';
 import ErroredLog from '../../connection/logs/ErroredLog.js';
 import AsyncErrorLog from '../../connection/logs/AsyncErrorLog.js';
+import SysCallErrorLog from '../../connection/logs/SysCallErrorLog.js';
 
 class Loggable {
     id;
@@ -35,10 +36,16 @@ class Loggable {
         GUI.sendLog(new InfoLog(parentID, message));
     }
 
-    errorMessageLog(parentID, error) {
+    errorMessageLog(parentID, errorMessage) {
         this.#assertGUIInitialized();
 
-        GUI.sendLog(new ErrorMessageLog(parentID, error));
+        GUI.sendLog(new ErrorMessageLog(parentID, errorMessage));
+    }
+
+    sysCallErrorLog(parentID, error) {
+        this.#assertGUIInitialized();
+
+        GUI.sendLog(new SysCallErrorLog(parentID, error));
     }
 
     erroredLog() {

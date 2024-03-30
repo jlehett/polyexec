@@ -3,18 +3,18 @@ import Log from '../Log.js';
 class ErrorMessageLog extends Log {
     static type = 'error-message';
 
-    constructor(parentID, error) {
+    constructor(parentID, errorMessage) {
         super();
 
         this.parentID = parentID;
-        this.error = error;
+        this.errorMessage = errorMessage;
     }
 
     toJSON() {
         return {
             ...super.toJSON(),
             parentID: this.parentID,
-            error: this.error,
+            errorMessage: this.errorMessage,
         };
     }
 }

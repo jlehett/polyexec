@@ -1,7 +1,10 @@
 import { spawn } from 'child_process';
 
+const controller = new AbortController();
+const { signal } = controller;
+
 // Spawn 'vite preview' as a child process
-const vitePreview = spawn('vite', ['preview']);
+const vitePreview = spawn('vite', ['preview'], { signal });
 
 vitePreview.stdout.on('data', (data) => {
     // Convert the Buffer to a string
@@ -22,6 +25,7 @@ vitePreview.stdout.on('data', (data) => {
                     ...process.env,
                     VITE_PORT: port,
                 },
+                signal,
             });
 
             console.log('Electron process started.');
@@ -36,7 +40,7 @@ vitePreview.stdout.on('data', (data) => {
             });
 
             electronProcess.on('close', (code) => {
-                console.log(`electron process exited with code ${code}`);
+                process.exit();
             });
         }
     }
@@ -48,4 +52,19 @@ vitePreview.stderr.on('data', (data) => {
 
 vitePreview.on('close', (code) => {
   console.log(`child process exited with code ${code}`);
+});
+
+process.on('exit', () => {
+    controller.abort();
+    console.log('electron process exited');
+});
+
+process.on('SIGINT', () => {
+    controller.abort();
+    process.exit();
+});
+
+process.on('SIGTERM', () => {
+    controller.abort();
+    process.exit();
 });
