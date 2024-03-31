@@ -1,6 +1,6 @@
 import Command from './Command.js';
 import SerialCommandGroup from './SerialCommandGroup.js';
-import Loggable from './Loggable.js';
+import Loggable from './extensions/Loggable.js';
 import PathParser from '../services/PathParser.js';
 
 class ConcurrentCommandGroup extends Loggable {
