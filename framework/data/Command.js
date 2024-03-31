@@ -30,8 +30,6 @@ class Command extends Loggable {
                     }
 
                     this.lastErrorMessage = data.toString();
-
-                    this.errorMessageLog(parentID, data.toString());
                 });
 
                 this.process.on('close', (code) => {
