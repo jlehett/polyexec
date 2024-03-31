@@ -36,6 +36,12 @@ class Loggable {
         GUI.sendLog(new InfoLog(parentID, message));
     }
 
+    warningMessageLog(parentID, message) {
+        this.#assertGUIInitialized();
+
+        GUI.sendLog(new WarningLog(parentID, message));
+    }
+
     errorMessageLog(parentID, errorMessage) {
         this.#assertGUIInitialized();
 

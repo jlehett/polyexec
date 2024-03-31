@@ -6,6 +6,13 @@
     white-space: break-spaces;
 }
 
+.warningLog {
+
+    span {
+        color: $warning;
+    }
+}
+
 .errorMessageLog,
 .sysCallErrorLog {
 

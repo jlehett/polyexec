@@ -5,6 +5,8 @@ class Command extends Loggable {
     constructor(commandString) {
         super();
         this.commandString = commandString;
+
+        this.lastErrorMessage = null;
     }
 
     static create(commandString) {
@@ -23,18 +25,28 @@ class Command extends Loggable {
                 });
 
                 this.process.stderr.on('data', (data) => {
+                    if (this.lastErrorMessage) {
+                        this.warningMessageLog(parentID, this.lastErrorMessage);
+                    }
+
+                    this.lastErrorMessage = data.toString();
+
                     this.errorMessageLog(parentID, data.toString());
                 });
 
                 this.process.on('close', (code) => {
-                    code === 0 ? resolve() : reject(new Error(`Command exited with code ${code}`));
+                    if (code === 0) {
+                        resolve();
+                    } else if (this.lastErrorMessage) {
+                        this.errorMessageLog(parentID, this.lastErrorMessage);
+                    } else {
+                        reject(new Error(`Command exited with code ${code}`));
+                    }
                 });
 
                 this.process.on('error', (err) => {
-                    console.log('Error:', err, this.commandString);
                     reject(err);
                 });
-
 
             });
         } catch (err) {

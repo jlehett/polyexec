@@ -1,4 +1,5 @@
 import InfoLog from '../../../../../connection/logs/InfoLog';
+import WarningLog from '../../../../../connection/logs/WarningLog';
 import ErrorMessageLog from '../../../../../connection/logs/ErrorMessageLog';
 import SysCallErrorLog from '../../../../../connection/logs/SysCallErrorLog';
 import localStyles from './Log.module.scss';
@@ -13,6 +14,8 @@ function Log({
         switch (log.type) {
             case InfoLog.type:
                 return <InfoLogUI log={log}/>;
+            case WarningLog.type:
+                return <WarningLogUI log={log}/>;
             case ErrorMessageLog.type:
                 return <ErrorMessageLogUI log={log}/>;
             case SysCallErrorLog.type:
@@ -41,6 +44,20 @@ function InfoLogUI({
     return (
         <p className={localStyles.infoLog}>
             {log.message}
+        </p>
+    );
+}
+
+function WarningLogUI({
+    log,
+}) {
+    return (
+        <p className={localStyles.warningLog}>
+            {log.message && (
+                <span className={localStyles.warningMessage}>
+                    {log.message}
+                </span>
+            )}
         </p>
     );
 }
