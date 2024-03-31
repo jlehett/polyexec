@@ -1,12 +1,12 @@
-import Loggable from './Loggable.js';
+import Loggable from './extensions/Loggable.js';
 import ProcessManager from '../services/ProcessManager.js';
+import StdErrMessageHandler from './modules/StdErrMessageHandler.js';
 
 class Command extends Loggable {
     constructor(commandString) {
         super();
-        this.commandString = commandString;
 
-        this.lastErrorMessage = null;
+        this.commandString = commandString;
     }
 
     static create(commandString) {
@@ -14,6 +14,11 @@ class Command extends Loggable {
     }
 
     async runWithCwd(cwd, parentID) {
+        const stdErrMessageHandler = new StdErrMessageHandler({
+            onConsumeWarning: (message) => this.warningMessageLog(parentID, message),
+            onConsumeError: (message) => this.errorMessageLog(parentID, message),
+        });
+
         try {
             await new Promise((resolve, reject) => {
                 this.process = ProcessManager.spawn(this.commandString, { cwd, shell: true });
@@ -25,18 +30,12 @@ class Command extends Loggable {
                 });
 
                 this.process.stderr.on('data', (data) => {
-                    if (this.lastErrorMessage) {
-                        this.warningMessageLog(parentID, this.lastErrorMessage);
-                    }
-
-                    this.lastErrorMessage = data.toString();
+                    stdErrMessageHandler.handleStdErr(data.toString());
                 });
 
                 this.process.on('close', (code) => {
                     if (code === 0) {
                         resolve();
-                    } else if (this.lastErrorMessage) {
-                        this.errorMessageLog(parentID, this.lastErrorMessage);
                     } else {
                         reject(new Error(`Command exited with code ${code}`));
                     }
