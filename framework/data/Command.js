@@ -37,6 +37,10 @@ class Command extends Loggable {
                     if (code === 0) {
                         resolve();
                     } else {
+                        if (stdErrMessageHandler.hasPendingMessage) {
+                            stdErrMessageHandler.consumeLastMessageAsError();
+                        }
+
                         reject(new Error(`Command exited with code ${code}`));
                     }
                 });

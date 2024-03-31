@@ -18,6 +18,10 @@ class StdErrMessageHandler {
         this.onConsumeError = onConsumeError;
     }
 
+    get hasPendingMessage() {
+        return Boolean(this.lastMessage);
+    }
+
     handleStdErr(message) {
         if (this.lastMessage) {
             this.#consumeLastMessageAsWarning();
@@ -29,6 +33,13 @@ class StdErrMessageHandler {
             this.onConsumeError(message);
         } else {
             this.#deliberateOnMessage(message);
+        }
+    }
+
+    consumeLastMessageAsError() {
+        if (this.lastMessage) {
+            this.onConsumeError(this.lastMessage);
+            this.#resetLastMessageTracker();
         }
     }
 
