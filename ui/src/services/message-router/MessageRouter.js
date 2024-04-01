@@ -9,7 +9,7 @@ import ConfigVarStore from '../config-var-store/ConfigVarStore';
 
 //#region Config
 
-const MESSAGE_CHECK_TIME = 25;
+const MESSAGE_CHECK_TIME = 1;
 
 //#endregion
 
