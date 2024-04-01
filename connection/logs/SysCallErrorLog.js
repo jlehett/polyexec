@@ -3,6 +3,14 @@ import Log from '../Log.js';
 class SysCallErrorLog extends Log {
     static type = 'syscall-error';
 
+    get isValid() {
+        return ![null, undefined].includes(this.parentID)
+            && (
+                Boolean(this.error?.code?.())
+                || Boolean(this.error?.syscall?.trim?.())
+            );
+    }
+
     constructor(parentID, error) {
         super();
 

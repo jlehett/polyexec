@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import InfoLog from '../../../../../connection/logs/InfoLog';
 import WarningLog from '../../../../../connection/logs/WarningLog';
 import ErrorMessageLog from '../../../../../connection/logs/ErrorMessageLog';
@@ -10,7 +9,8 @@ import localStyles from './Log.module.scss';
 function Log({
     log,
 }) {
-    const logUiEle = useMemo(() => {
+
+    function renderLog() {
         switch (log.type) {
             case InfoLog.type:
                 return <InfoLogUI log={log}/>;
@@ -23,15 +23,11 @@ function Log({
             default:
                 return null;
         }
-    }, [log]);
-
-    if (!logUiEle) {
-        return null;
     }
 
     return (
         <div className={localStyles.logWrapper}>
-            {logUiEle}
+            {renderLog()}
         </div>
     );
 }
@@ -45,10 +41,6 @@ export default Log;
 function InfoLogUI({
     log,
 }) {
-    if (!log.message) {
-        return null;
-    }
-
     return (
         <p className={localStyles.infoLog}>
             {log.message.trim()}
@@ -59,10 +51,6 @@ function InfoLogUI({
 function WarningLogUI({
     log,
 }) {
-    if (!log.message) {
-        return null;
-    }
-
     return (
         <p className={localStyles.warningLog}>
             {log.message && (
@@ -77,10 +65,6 @@ function WarningLogUI({
 function ErrorMessageLogUI({
     log,
 }) {
-    if (!log.errorMessage) {
-        return null;
-    }
-
     return (
         <p className={localStyles.errorMessageLog}>
             {log.errorMessage && (
@@ -95,10 +79,6 @@ function ErrorMessageLogUI({
 function SysCallErrorLogUI({
     log,
 }) {
-    if (!log.error.code && !log.error.syscall) {
-        return null;
-    }
-
     return (
         <p className={localStyles.sysCallErrorLog}>
             {log.error.code && (

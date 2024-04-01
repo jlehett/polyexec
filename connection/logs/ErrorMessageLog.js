@@ -3,6 +3,11 @@ import Log from '../Log.js';
 class ErrorMessageLog extends Log {
     static type = 'error-message';
 
+    get isValid() {
+        return ![null, undefined].includes(this.parentID)
+            && Boolean(this.errorMessage?.trim?.());
+    }
+
     constructor(parentID, errorMessage) {
         super();
 

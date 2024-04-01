@@ -24,25 +24,6 @@ function ErrorTracker({
         let lastHeader;
 
         return errorLogs.map((errorLog, errorLogIndex) => {
-            const errorLogUI = (() => {
-                switch (errorLog.type) {
-                    case ErrorMessageLog.type:
-                        return (
-                            <ErrorMessageLogUI log={errorLog}/>
-                        );
-                    case SysCallErrorLog.type:
-                        return (
-                            <SysCallErrorLogUI log={errorLog}/>
-                        );
-                    default:
-                        return null;
-                }
-            })();
-
-            if (!errorLogUI) {
-                return null;
-            }
-
             const groupInfo = LogStore.getGroupInfo(errorLog);
 
             const Wrapper = lastHeader !== groupInfo?.name
@@ -60,12 +41,23 @@ function ErrorTracker({
 
             lastHeader = groupInfo?.name;
 
-            return (
-                <Wrapper key={errorLogIndex}>
-                    {errorLogUI}
-                </Wrapper>
-            );
-        }).filter((ele) => Boolean(ele));
+            switch (errorLog.type) {
+                case ErrorMessageLog.type:
+                    return (
+                        <Wrapper key={errorLogIndex}>
+                            <ErrorMessageLogUI log={errorLog}/>
+                        </Wrapper>
+                    );
+                case SysCallErrorLog.type:
+                    return (
+                        <Wrapper key={errorLogIndex}>
+                            <SysCallErrorLogUI log={errorLog}/>
+                        </Wrapper>
+                    );
+                default:
+                    return null;
+            }
+        });
     }
 
     return (
@@ -107,10 +99,6 @@ function useErrorLogs() {
 function ErrorMessageLogUI({
     log,
 }) {
-    if (!log.errorMessage) {
-        return null;
-    }
-
     return (
         <p className={localStyles.errorLog}>
             {
@@ -127,10 +115,6 @@ function ErrorMessageLogUI({
 function SysCallErrorLogUI({
     log,
 }) {
-    if (!log?.error?.code && !log?.error?.syscall) {
-        return null;
-    }
-
     return (
         <p className={localStyles.errorLog}>
             {

@@ -3,6 +3,11 @@ import Log from '../Log.js';
 class StartingLog extends Log {
     static type = 'starting';
 
+    get isValid() {
+        return ![null, undefined].includes(this.id)
+            && Boolean(this.name?.trim?.());
+    }
+
     constructor(name, id, parentID) {
         super();
 
