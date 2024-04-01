@@ -4,6 +4,9 @@
     color: $secondary;
     word-break: break-word;
     white-space: break-spaces;
+    border-left: 1px solid $secondary;
+    padding: 4px 12px;
+    margin: 4px 0;
 }
 
 .warningLog {

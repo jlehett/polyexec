@@ -23,8 +23,7 @@ class ConcurrentCommandGroup extends Loggable {
         try {
             await this.runWithCwd(this.cwd);
         } catch (err) {
-            console.log('\x1b[31m%s\x1b[0m', `Error running ConcurrentCommandGroup: ${err}`);
-            console.log('\x1b[31m%s\x1b[0m', 'Halting execution.');
+            console.log('\x1b[31m%s\x1b[0m', `Error while running ConcurrentCommandGroup: ${err}`);
         }
     }
 

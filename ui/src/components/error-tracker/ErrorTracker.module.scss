@@ -4,16 +4,23 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    & > * {
+        border-left: 1px solid $error-header;
+        padding: 4px 12px;
+        margin: 4px 0;
+    }
 }
 
 .errorLog {
 
     span {
         color: $error;
+        white-space: break-spaces;
     }
 }
 
 .groupName {
-    color: $error;
+    color: $error-header;
     font-weight: bold;
 }

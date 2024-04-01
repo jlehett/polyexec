@@ -7,6 +7,12 @@ import RequestHandler from '../request-handler/RequestHandler';
 import LogStore from '../log-store/LogStore';
 import ConfigVarStore from '../config-var-store/ConfigVarStore';
 
+//#region Config
+
+const MESSAGE_CHECK_TIME = 50;
+
+//#endregion
+
 class MessageRouter {
 
     #runningInterval;
@@ -36,7 +42,7 @@ class MessageRouter {
         if (value) {
             this.#runningInterval = setInterval(() => {
                 this.#processQueue();
-            }, 500);
+            }, MESSAGE_CHECK_TIME);
         }
 
         if (!value) {
