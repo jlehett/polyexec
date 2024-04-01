@@ -28,17 +28,22 @@ class ConcurrentCommandGroup extends Loggable {
         }
     }
 
-    async runWithCwd(cwd, parentID=undefined) {
+    async runWithCwd(cwd, parentID=undefined, propagateError) {
         this.startLog(parentID);
+
+        const onErrorEncountered = () => {
+            this.asyncErrorLog();
+            propagateError?.();
+        };
 
         try {
             await Promise.all(this.commands.map(task => {
                 switch (task.constructor) {
                     case Command:
-                        return task.runWithCwd(cwd, this.id);
+                        return task.runWithCwd(cwd, this.id, onErrorEncountered);
                     case SerialCommandGroup:
                     case ConcurrentCommandGroup:
-                        return task.runWithCwd(task.cwd || cwd, this.id);
+                        return task.runWithCwd(task.cwd || cwd, this.id, onErrorEncountered);
                 }
             }));
         } catch (err) {

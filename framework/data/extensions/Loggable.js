@@ -16,7 +16,6 @@ class Loggable {
     constructor(name=undefined) {
         this.name = name;
         this.id = crypto.randomUUID();
-
     }
 
     startLog(parentID) {

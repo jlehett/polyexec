@@ -13,10 +13,13 @@ class Command extends Loggable {
         return new Command(commandString);
     }
 
-    async runWithCwd(cwd, parentID) {
+    async runWithCwd(cwd, parentID, onErrorEncountered) {
         const stdErrMessageHandler = new StdErrMessageHandler({
             onConsumeWarning: (message) => this.warningMessageLog(parentID, message),
-            onConsumeError: (message) => this.errorMessageLog(parentID, message),
+            onConsumeError: (message) => {
+                this.errorMessageLog(parentID, message);
+                onErrorEncountered?.();
+            },
         });
 
         try {
