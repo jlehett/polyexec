@@ -8,7 +8,7 @@
   "main": "framework/index.js",
   "scripts": {
     "start": "cd ui && npm run start-gui",
-    "prepare": "cd ui && npm run build"
+    "prepublishOnly": "cd ui && npm run build"
   },
   "dependencies": {
     "electron": "^24.3.1",

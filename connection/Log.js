@@ -9,7 +9,7 @@ class Log {
     }
 
     send(wss) {
-        if (!this.constructor.isValid) {
+        if (!this.isValid) {
             return;
         }
 
