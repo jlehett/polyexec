@@ -32,7 +32,7 @@ class ConfigVar {
     }
 
     async get() {
-        const configJson = await this.config.get();
+        const configJson = this.config.get();
 
         if (this.related !== undefined) {
             return configJson[this.key]?.[this.related];
@@ -42,7 +42,7 @@ class ConfigVar {
     }
 
     async set(data) {
-        const configJson = await this.config.get();
+        const configJson = this.config.get();
 
         if (this.related !== undefined) {
             if (configJson[this.key] === undefined) {
@@ -54,7 +54,7 @@ class ConfigVar {
             configJson[this.key] = data;
         }
 
-        await this.config.set(configJson);
+        this.config.set(configJson);
     }
 
     #sendStandardConfigVarUsage(value) {

@@ -2,7 +2,7 @@ import fs from 'fs';
 
 class Json {
 
-    static async get(path) {
+    static get(path) {
         if (!fs.existsSync(path)) {
             fs.writeFileSync(path, '{}');
         }

@@ -17,10 +17,15 @@
     span {
         color: $error;
         white-space: break-spaces;
+        word-wrap: break-word;
     }
 }
 
 .groupName {
     color: $error-header;
     font-weight: bold;
+}
+
+.errorTrackerContent {
+    max-height: calc(50vh - 65px);
 }

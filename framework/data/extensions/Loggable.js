@@ -30,10 +30,10 @@ class Loggable {
         GUI.sendLog(new EndingLog(this.id));
     }
 
-    infoLog(parentID, message) {
+    infoLog(parentID, message, { isSuccess = false } = {}) {
         this.#assertGUIInitialized();
 
-        GUI.sendLog(new InfoLog(parentID, message));
+        GUI.sendLog(new InfoLog(parentID, message, { isSuccess }));
     }
 
     warningMessageLog(parentID, message) {

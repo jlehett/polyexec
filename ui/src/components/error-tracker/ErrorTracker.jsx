@@ -7,9 +7,7 @@ import SysCallErrorLog from '../../../../connection/logs/SysCallErrorLog';
 
 //#region Main Component
 
-function ErrorTracker({
-    maxHeight,
-}) {
+function ErrorTracker() {
     const errorLogs = useErrorLogs();
 
     function renderErrorLogs() {
@@ -65,7 +63,7 @@ function ErrorTracker({
             <header>
                 <h1>Errors</h1>
             </header>
-            <div className="content" style={{ maxHeight }}>
+            <div className={`content ${localStyles.errorTrackerContent}`}>
                 <div className={localStyles.errorLogsContainer}>
                     {renderErrorLogs()}
                 </div>

@@ -9,3 +9,5 @@ ui/src
 ui/public
 ui/index.html
 ui/vite.config.js
+
+ui/testing

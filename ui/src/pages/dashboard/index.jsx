@@ -17,11 +17,11 @@ function Dashboard() {
         <div className={localStyles.page}>
             <RequestHandler/>
             <div className={localStyles.leftSide}>
-                <Logs maxHeight={300}/>
-                <ErrorTracker maxHeight={300}/>
+                <Logs/>
+                <ErrorTracker/>
             </div>
             <div className={localStyles.rightSide}>
-                <ConfigDisplay maxHeight={300}/>
+                <ConfigDisplay/>
             </div>
         </div>
     );

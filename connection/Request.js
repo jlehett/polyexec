@@ -10,10 +10,6 @@ class Request {
         this.id = crypto.randomUUID();
     }
 
-    static createResponse() {
-        // TODO
-    }
-
     async send(wss) {
         return new Promise((resolve) => {
             wss.clients.forEach((client) => {

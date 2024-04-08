@@ -7,6 +7,7 @@
   "type": "module",
   "main": "electron.cjs",
   "scripts": {
+    "test": "vite",
     "start-gui": "node start-gui.js",
     "build": "cross-env NODE_ENV=production vite build",
     "preview": "vite preview"

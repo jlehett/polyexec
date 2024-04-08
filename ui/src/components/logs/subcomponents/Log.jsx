@@ -41,8 +41,18 @@ export default Log;
 function InfoLogUI({
     log,
 }) {
+    const styleOverrides = (() => {
+        let overrides = {};
+
+        if (log.isSuccess) {
+            overrides.color = '#79ff87';
+        }
+
+        return overrides;
+    })();
+
     return (
-        <p className={localStyles.infoLog}>
+        <p className={localStyles.infoLog} style={styleOverrides}>
             {log.message.trim()}
         </p>
     );

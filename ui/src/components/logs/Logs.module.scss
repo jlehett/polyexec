@@ -5,3 +5,7 @@
     flex-direction: column;
     gap: 8px;
 }
+
+.logsContent {
+    max-height: calc(50vh - 65px);
+}

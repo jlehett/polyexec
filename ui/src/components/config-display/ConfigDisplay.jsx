@@ -6,9 +6,7 @@ import localStyles from './ConfigDisplay.module.scss';
 
 //#region Main Component
 
-function ConfigDisplay({
-    maxHeight,
-}) {
+function ConfigDisplay() {
     const configVars = useConfigVars();
 
     function renderConfigVars() {
@@ -42,7 +40,7 @@ function ConfigDisplay({
             <header>
                 <h1>Config Variables</h1>
             </header>
-            <div className="content" stle={{ maxHeight }}>
+            <div className={`content ${localStyles.configDisplayContent}`}>
                 <div className={localStyles.configVarsContainer}>
                     {renderConfigVars()}
                 </div>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useEffect } from 'react';
 import {
     Form,
     TextField,
@@ -15,6 +15,16 @@ function ValueRequestDialog({
     request,
 }) {
 
+    useEffect(() => {
+        if (isOpen) {
+            const input = document.querySelector(`.${localStyles.body}`).querySelector('input');
+            
+            if (input) {
+                input.focus();
+            }
+        }
+    }, [isOpen]);
+
     function validate(newValue) {
         return ValueRequest.validateValue(request.validate, newValue)
             ? null
@@ -27,6 +37,35 @@ function ValueRequestDialog({
         });
 
         close();
+    }
+
+    function handleSelectRecommendedOption(option) {
+        RequestHandler.sendResponse({
+            value: option,
+        });
+
+        close();
+    }
+
+    function renderRecommendedOptions() {
+        if (!request.recommendedOptions || request.recommendedOptions.length === 0) {
+            return null;
+        }
+
+        return (
+            <div className={localStyles.recommendedOptions}>
+                <p>Recommended Options:</p>
+                <ul>
+                    {request.recommendedOptions.map((option, index) => (
+                        <li key={index}>
+                            <button type="button" onClick={() => handleSelectRecommendedOption(option)}>
+                                {option}    
+                            </button>    
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 
     return (
@@ -47,6 +86,7 @@ function ValueRequestDialog({
                         darkMode
                         className={localStyles.input}
                     />
+                    {renderRecommendedOptions()}
                 </div>
                 <div className={localStyles.footer}>
                     <Button type="submit" variant="contained">

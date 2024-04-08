@@ -3,8 +3,8 @@ import Request from '../Request.js';
 class ValueRequest extends Request {
     static type = 'value-request';
 
-    constructor({ message, validate }) {
-        super({ message, validate: validate?.toString?.() });
+    constructor({ message, validate, recommendedOptions }) {
+        super({ message, validate: validate?.toString?.(), recommendedOptions });
     }
 
     async send(wss) {

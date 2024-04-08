@@ -1,4 +1,4 @@
-import localStyles from './dialog.module.scss';
+import localStyles from './Dialog.module.scss';
 
 function Dialog({
     isOpen,

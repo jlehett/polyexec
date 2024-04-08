@@ -9,7 +9,7 @@ class Connection {
     };
 
     async connect() {
-        this.socket = new WebSocket(`ws://localhost:${window.ports.connection}`);
+        this.socket = new WebSocket(`ws://localhost:${window?.ports?.connection || 21734}`);
 
         this.socket.onopen = () => {
             emit(this.EVENTS.CONNECTED);

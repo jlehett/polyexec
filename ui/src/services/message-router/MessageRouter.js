@@ -28,6 +28,8 @@ class MessageRouter {
 
     receive(message) {
         const data = JSON.parse(message.data);
+        
+        console.log('Received message', data);
 
         this.messageQueue.enqueue(data);
 
