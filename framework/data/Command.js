@@ -59,6 +59,9 @@ class Command extends Loggable {
                                 return onError(message);
                             case LOG_OVERRIDES.WARNING:
                                 return onWarning(message);
+                            case LOG_OVERRIDES.RUNNING:
+                                onInfo(message, { isRunning: true });
+                                return this.restartingLog(parentID);
                         }
                     })
 
@@ -151,6 +154,7 @@ export const LOG_OVERRIDES = {
     SUCCESS: 'SUCCESS',
     ERROR: 'ERROR',
     WARNING: 'WARNING',
+    RUNNING: 'RUNNING',
 };
 
 //#endregion

@@ -3,10 +3,11 @@ import { useOnEmit } from '@psionic/emit-react';
 import {
     IconButton,
 } from '@psionic/ui';
-import StartingLog from '../../../../../connection/logs/StartingLog';
+import InfoLog from '../../../../../connection/logs/InfoLog';
 import EndingLog from '../../../../../connection/logs/EndingLog';
 import ErroredLog from '../../../../../connection/logs/ErroredLog';
 import AsyncErrorLog from '../../../../../connection/logs/AsyncErrorLog';
+import RestartingLog from '../../../../../connection/logs/RestartingLog';
 import CachedIcon from '@assets/cached';
 import KeyboardArrowUpIcon from '@assets/keyboard-arrow-up';
 import KeyboardArrowDownIcon from '@assets/keyboard-arrow-down';
@@ -16,6 +17,7 @@ import LogStore from '@services/log-store/LogStore';
 import Spinning from '@components/lib/Spinning';
 import Log from './Log';
 import localStyles from './LogGroup.module.scss';
+import ErrorMessageLog from '../../../../../connection/logs/ErrorMessageLog';
 
 //#region Ref Enums
 
@@ -32,7 +34,7 @@ const STATUS = {
 function LogGroup({
     groupID,
 }) {
-    const groupStatus = useGroupStatus(groupID);
+    const { groupStatus, setGroupStatus } = useGroupStatus(groupID);
 
     const [isExpanded, setIsExpanded] = useState(true);
 
@@ -46,7 +48,7 @@ function LogGroup({
 
     const groupInfo = LogStore.getGroupInfo({ id: groupID });
 
-    const childLogs = useChildLogs(groupID);
+    const childLogs = useChildLogs(groupID, setGroupStatus);
 
     function renderStatusIcon() {
         switch (groupStatus) {
@@ -124,36 +126,41 @@ function isLogAGroup(log) {
     return Boolean(log.id);
 }
 
-function isStartingLog(log) {
-    return log.type === StartingLog.type;
-}
-
 function isChildOfGroup(groupID, log) {
     return groupID === log.parentID;
 }
 
-function isStartingChildGroupLog(groupID, log) {
-    return isLogAGroup(log) && isStartingLog(log) && isChildOfGroup(groupID, log);
-}
-
-function isNonGroupChildLog(groupID, log) {
-    return !isLogAGroup(log) && isChildOfGroup(groupID, log);
+function setSuccessIfNotAlreadyError(prevStatus) {
+    return prevStatus === STATUS.ERROR ? STATUS.ERROR : STATUS.COMPLETED;
 }
 
 //#endregion
 
 //#region Helper Hooks
 
-function useChildLogs(groupID) {
+function useChildLogs(groupID, setGroupStatus) {
     const [childLogs, setChildLogs] = useState([]);
 
     useOnEmit(LogStore.EVENTS.LOG_ADDED, (log) => {
-        if (isStartingChildGroupLog(groupID, log)) {
-            setChildLogs((logsInGroup) => [...logsInGroup, log]);
-        }
+        if (!isChildOfGroup(groupID, log)) return;
 
-        if (isNonGroupChildLog(groupID, log)) {
-            setChildLogs((logsInGroup) => [...logsInGroup, log]);
+        switch (log.type) {
+            case RestartingLog.type:
+                setGroupStatus(STATUS.RUNNING);
+                break;
+            case ErrorMessageLog.type:
+                setGroupStatus(STATUS.ERROR);
+                break;
+            case InfoLog.type: {
+                if (log.isSuccess) {
+                    setGroupStatus(setSuccessIfNotAlreadyError);
+                }
+
+                setChildLogs((logsInGroup) => [...logsInGroup, log]);
+                break;
+            }
+            default:
+                setChildLogs((logsInGroup) => [...logsInGroup, log]);
         }
     });
 
@@ -167,9 +174,7 @@ function useGroupStatus(groupID) {
         if (isLogForGroupItself(groupID, log)) {
             switch (log.type) {
                 case EndingLog.type:
-                    setGroupStatus((prev) => {
-                        return prev === STATUS.ERROR ? STATUS.ERROR : STATUS.COMPLETED;
-                    });
+                    setGroupStatus(setSuccessIfNotAlreadyError);
                     break;
                 case ErroredLog.type:
                 case AsyncErrorLog.type:
@@ -181,7 +186,10 @@ function useGroupStatus(groupID) {
         }
     });
 
-    return groupStatus;
+    return {
+        groupStatus,
+        setGroupStatus,
+    };
 }
 
 //#endregion

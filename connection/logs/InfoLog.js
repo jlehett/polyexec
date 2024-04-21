@@ -8,13 +8,14 @@ class InfoLog extends Log {
             && Boolean(this.message?.trim?.());
     }
 
-    constructor(parentID, message, { isSuccess = false } = {}) {
+    constructor(parentID, message, { isSuccess = false, isRunning = false } = {}) {
         super();
 
         this.parentID = parentID;
         this.message = message;
 
         this.isSuccess = isSuccess;
+        this.isRunning = isRunning;
     }
 
     toJSON() {
@@ -23,6 +24,7 @@ class InfoLog extends Log {
             parentID: this.parentID,
             message: this.message,
             isSuccess: this.isSuccess,
+            isRunning: this.isRunning,
         };
     }
 }

@@ -8,6 +8,7 @@ import WarningLog from '../../../connection/logs/WarningLog.js';
 import ErroredLog from '../../../connection/logs/ErroredLog.js';
 import AsyncErrorLog from '../../../connection/logs/AsyncErrorLog.js';
 import SysCallErrorLog from '../../../connection/logs/SysCallErrorLog.js';
+import RestartingLog from '../../../connection/logs/RestartingLog.js';
 
 class Loggable {
     id;
@@ -30,10 +31,10 @@ class Loggable {
         GUI.sendLog(new EndingLog(this.id));
     }
 
-    infoLog(parentID, message, { isSuccess = false } = {}) {
+    infoLog(parentID, message, { isSuccess = false, isRunning = false } = {}) {
         this.#assertGUIInitialized();
 
-        GUI.sendLog(new InfoLog(parentID, message, { isSuccess }));
+        GUI.sendLog(new InfoLog(parentID, message, { isSuccess, isRunning }));
     }
 
     warningMessageLog(parentID, message) {
@@ -58,6 +59,12 @@ class Loggable {
         this.#assertGUIInitialized();
 
         GUI.sendLog(new ErroredLog(this.id));
+    }
+
+    restartingLog(parentID) {
+        this.#assertGUIInitialized();
+
+        GUI.sendLog(new RestartingLog(parentID));
     }
 
     asyncErrorLog() {

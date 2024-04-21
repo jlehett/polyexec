@@ -10,7 +10,7 @@ function Log({
     log,
 }) {
 
-    function renderLog() {
+    const logElement = (() => {
         switch (log.type) {
             case InfoLog.type:
                 return <InfoLogUI log={log}/>;
@@ -23,11 +23,11 @@ function Log({
             default:
                 return null;
         }
-    }
+    })();
 
-    return (
+    return logElement && (
         <div className={localStyles.logWrapper}>
-            {renderLog()}
+            {logElement}
         </div>
     );
 }
@@ -46,6 +46,10 @@ function InfoLogUI({
 
         if (log.isSuccess) {
             overrides.color = '#79ff87';
+        }
+
+        if (log.isRunning) {
+            overrides.color = '#63b8ff';
         }
 
         return overrides;

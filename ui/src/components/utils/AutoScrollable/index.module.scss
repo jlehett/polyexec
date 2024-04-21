@@ -10,7 +10,7 @@
 }
 
 .scrollButton {
-    position: absolute;
+    position: absolute !important;
     right: 24px;
     bottom: 16px;
     pointer-events: all;
