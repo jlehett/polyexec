@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useOnEmit } from '@psionic/emit-react';
 import ErrorMessageLog from '../../../../connection/logs/ErrorMessageLog';
 import LogStore from '@services/log-store/LogStore';
+import AutoScrollable from '@components/utils/AutoScrollable';
 import localStyles from './ErrorTracker.module.scss';
 import SysCallErrorLog from '../../../../connection/logs/SysCallErrorLog';
 
@@ -63,11 +64,11 @@ function ErrorTracker() {
             <header>
                 <h1>Errors</h1>
             </header>
-            <div className={`content ${localStyles.errorTrackerContent}`}>
+            <AutoScrollable className={`content ${localStyles.errorTrackerContent}`} initiallyEnabled>
                 <div className={localStyles.errorLogsContainer}>
                     {renderErrorLogs()}
                 </div>
-            </div>
+            </AutoScrollable>
         </div>
     );
 }

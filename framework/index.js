@@ -1,4 +1,7 @@
-export { default as Command } from './data/Command.js';
+export {
+    default as Command,
+    LOG_OVERRIDES,
+} from './data/Command.js';
 export { default as ConcurrentCommandGroup } from './data/ConcurrentCommandGroup.js';
 export { default as SerialCommandGroup } from './data/SerialCommandGroup.js';
 export { default as Config } from './data/Config.js';

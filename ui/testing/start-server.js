@@ -1,6 +1,8 @@
 import readline from 'readline';
-import WebSocket from 'ws';
 import ValueRequest from '../../connection/requests/ValueRequest.js';
+import InfoLog from '../../connection/logs/InfoLog.js';
+import StartingLog from '../../connection/logs/StartingLog.js';
+import ErrorMessageLog from '../../connection/logs/ErrorMessageLog.js';
 import DataStream from '../../framework/services/DataStream.js';
 
 const dataStream = new DataStream({ port: 21734 });
@@ -20,6 +22,8 @@ const rl = readline.createInterface({
 rl.setPrompt('> ');
 rl.prompt();
 
+let numRootLogs = 0;
+
 rl.on('line', (line) => {
     const command = line.trim().split(' ');
 
@@ -30,6 +34,22 @@ rl.on('line', (line) => {
         case 'request':
             dataStream.sendRequest(new ValueRequest({ message: 'Enter thing', recommendedOptions: ['risks', 'audits', 'processes'] }));
             break;
+        case 'rootLog':
+            dataStream.sendLog(new StartingLog('New Root', String(++numRootLogs), null));
+            break;
+        case 'log':
+            if (command[1] <= numRootLogs && command[1] > 0) {
+                dataStream.sendLog(new InfoLog(command[1], command.slice(2).join(' ')));
+            } else {
+                console.log('Invalid root log ID.');
+            }
+            break;
+        case 'error':
+            if (command[1] <= numRootLogs && command[1] > 0) {
+                dataStream.sendLog(new ErrorMessageLog(command[1], command.slice(2).join(' ')));
+            } else {
+                console.log('Invalid root log ID.');
+            }
         default:
             console.log('Unknown command.');
             break;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useOnEmit } from '@psionic/emit-react';
 import StartingLog from '../../../../connection/logs/StartingLog';
 import LogStore from '@services/log-store/LogStore';
+import AutoScrollable from '@components/utils/AutoScrollable';
 import LogGroup from './subcomponents/LogGroup';
 import localStyles from './Logs.module.scss';
 
@@ -29,11 +30,11 @@ function Logs() {
             <header>
                 <h1>Logs</h1>
             </header>
-            <div className={`content ${localStyles.logsContent}`}>
+            <AutoScrollable className={`content ${localStyles.logsContent}`} initiallyEnabled>
                 <div className={localStyles.rootLogsContainer}>
                     {renderRootLogs()}
                 </div>
-            </div>
+            </AutoScrollable>
         </div>
     );
 }

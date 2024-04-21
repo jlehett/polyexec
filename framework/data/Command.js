@@ -16,9 +16,8 @@ class Command extends Loggable {
 
         this.commandString = commandString;
         
-        this.#initRegexArray('success');
-        this.#initRegexArray('error');
-        this.#initRegexArray('warning');
+        this.regexHandlers = [];
+        this.logOverrides = [];
     }
 
     static create(commandString) {
@@ -26,6 +25,8 @@ class Command extends Loggable {
     }
 
     async runWithCwd(cwd, parentID, onErrorEncountered) {
+        //#region Helper Closures
+
         const onInfo = (message, opts) => this.infoLog(parentID, message, opts);
 
         const onError = (message) => {
@@ -34,6 +35,8 @@ class Command extends Loggable {
         };
 
         const onWarning = (message) => this.warningMessageLog(parentID, message);
+
+        //#endregion
 
         const stdErrMessageHandler = new StdErrMessageHandler({
             onConsumeWarning: onWarning,
@@ -44,31 +47,31 @@ class Command extends Loggable {
             await new Promise((resolve, reject) => {
                 //#region Helper Functions
 
-                const checkBehaviorOverrides = (message) => {
-                    function matchesRegex(regexPatterns) {
-                        if (regexPatterns?.length > 0) {
-                            return regexPatterns.some((regex) => {
-                                return regex.test(message);
-                            });
-                        } else {
-                            return false;
+                const checkLogOverrides = (message) => {
+                    const matchingLogOverrides = this.#getMatchingLogOverrides(message);
+
+                    matchingLogOverrides.forEach(({ type }) => {
+                        switch (type) {
+                            case LOG_OVERRIDES.SUCCESS:
+                                onInfo(message, { isSuccess: true });
+                                return resolve();
+                            case LOG_OVERRIDES.ERROR:
+                                return onError(message);
+                            case LOG_OVERRIDES.WARNING:
+                                return onWarning(message);
                         }
+                    })
+
+                    return matchingLogOverrides.length > 0;
+                };
+
+                const dataHandlerFactory = ({ defaultLogFn }) => (data) => {
+                    if (!checkLogOverrides(data.toString())) {
+                        defaultLogFn(data.toString());
                     }
-        
-                    switch (true) {
-                        case matchesRegex(this.successRegex):
-                            onInfo(message, { isSuccess: true });
-                            resolve();
-                            return true;
-                        case matchesRegex(this.errorRegex):
-                            onError(message);
-                            return true;
-                        case matchesRegex(this.warningRegex):
-                            onWarning(message);
-                            return true;
-                        default:
-                            return false;
-                    }
+
+                    const matchingRegexHandlers = this.#getMatchingRegexHandlers(data.toString());
+                    matchingRegexHandlers.forEach(({ action }) => action(data.toString()));
                 };
 
                 //#endregion
@@ -77,17 +80,9 @@ class Command extends Loggable {
 
                 onInfo(`>> ${this.commandString}`);
 
-                this.process.stdout.on('data', (data) => {
-                    if (!checkBehaviorOverrides(data.toString())) {
-                        onInfo(data.toString());
-                    }
-                });
+                this.process.stdout.on('data', dataHandlerFactory({ defaultLogFn: onInfo }));
 
-                this.process.stderr.on('data', (data) => {
-                    if (!checkBehaviorOverrides(data.toString())) {
-                        stdErrMessageHandler.handleStdErr(data.toString());
-                    }
-                });
+                this.process.stderr.on('data', dataHandlerFactory({ defaultLogFn: (message) => stdErrMessageHandler.handleStdErr(message) }));
 
                 this.process.on('close', (code) => {
                     if (code === 0) {
@@ -113,15 +108,49 @@ class Command extends Loggable {
         }
     }
 
-    #initRegexArray(name) {
-        const propertyName = `${name}Regex`;
-        this[propertyName] = [];
-
-        this[`${name}On`] = (regex) => {
-            this[propertyName].push(regex);
-            return this;
+    on(regex, action) {
+        if (LOG_OVERRIDES[action]) {
+            this.logOverrides.push({
+                regex,
+                type: action,
+            });
+        } else {
+            this.regexHandlers.push({
+                regex,
+                action,
+            });
         }
+
+        return this;
     }
+
+    //#region Private Functions
+
+    #getMatchingRegexHandlers(textToTest) {
+        return this.regexHandlers.filter(({ regex }) => {
+            return regex.test(textToTest);
+        });
+    }
+
+    #getMatchingLogOverrides(textToTest) {
+        return this.logOverrides.filter(({ regex }) => {
+            return regex.test(textToTest);
+        });
+    }
+
+    #getLogOverride
+
+    //#endregion
 }
 
 export default Command;
+
+//#region Built-In Regex Handlers
+
+export const LOG_OVERRIDES = {
+    SUCCESS: 'SUCCESS',
+    ERROR: 'ERROR',
+    WARNING: 'WARNING',
+};
+
+//#endregion

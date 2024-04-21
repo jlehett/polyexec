@@ -1,0 +1,17 @@
+
+.autoScrollable {
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    // No events
+    pointer-events: none;
+}
+
+.scrollButton {
+    position: absolute;
+    right: 24px;
+    bottom: 16px;
+    pointer-events: all;
+}
