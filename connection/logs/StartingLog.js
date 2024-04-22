@@ -8,7 +8,7 @@ class StartingLog extends Log {
             && Boolean(this.name?.trim?.());
     }
 
-    constructor(name, id, parentID) {
+    constructor({ name, id, parentID } = {}) {
         super();
 
         this.name = name;

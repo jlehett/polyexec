@@ -7,7 +7,7 @@ class ErroredLog extends Log {
         return ![null, undefined].includes(this.id);
     }
 
-    constructor(id) {
+    constructor({ id } = {}) {
         super();
 
         this.id = id;

@@ -7,7 +7,7 @@ class RestartingLog extends Log {
         return ![null, undefined].includes(this.parentID);
     }
 
-    constructor(parentID) {
+    constructor({ parentID } = {}) {
         super();
         
         this.parentID = parentID;

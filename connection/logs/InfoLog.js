@@ -8,12 +8,17 @@ class InfoLog extends Log {
             && Boolean(this.message?.trim?.());
     }
 
-    constructor(parentID, message, { isSuccess = false, isRunning = false } = {}) {
+    constructor({
+        parentID,
+        message,
+        isSuccess = false,
+        isRunning = false,
+    } = {}) {
         super();
 
         this.parentID = parentID;
         this.message = message;
-
+        
         this.isSuccess = isSuccess;
         this.isRunning = isRunning;
     }

@@ -2,10 +2,13 @@ import Command from './Command.js';
 import ConcurrentCommandGroup from './ConcurrentCommandGroup.js';
 import Loggable from './extensions/Loggable.js';
 import PathParser from '../services/PathParser.js';
+import StartingLog from '../../connection/logs/StartingLog.js';
+import EndingLog from '../../connection/logs/EndingLog.js';
+import ErroredLog from '../../connection/logs/ErroredLog.js';
 
 class SerialCommandGroup extends Loggable {
     constructor({ commands, cwd, name }) {
-        super(name);
+        super({ name, type: 'CommandGroup' });
 
         this.cwd = PathParser.parse(cwd);
         this.commands = commands;
@@ -28,10 +31,10 @@ class SerialCommandGroup extends Loggable {
     }
 
     async runWithCwd(cwd, parentID=undefined, propagateError) {
-        this.startLog(parentID);
+        this.sendLog(StartingLog, { parentID });
 
         const onErrorEncountered = () => {
-            this.erroredLog();
+            this.sendLog(ErroredLog);
             propagateError?.();
         };
 
@@ -47,11 +50,11 @@ class SerialCommandGroup extends Loggable {
                 }
             }
         } catch (err) {
-            this.erroredLog();
+            this.sendLog(ErroredLog);
 
             throw err;
         } finally {
-            this.endLog();
+            this.sendLog(EndingLog);
         }
     }
 }

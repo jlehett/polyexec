@@ -8,7 +8,7 @@ class WarningLog extends Log {
             && Boolean(this.message?.trim?.());
     }
 
-    constructor(parentID, message) {
+    constructor({ parentID, message } = {}) {
         super();
 
         this.parentID = parentID;

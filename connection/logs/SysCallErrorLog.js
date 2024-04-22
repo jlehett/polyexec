@@ -11,7 +11,7 @@ class SysCallErrorLog extends Log {
             );
     }
 
-    constructor(parentID, error) {
+    constructor({ parentID, error } = {}) {
         super();
 
         this.parentID = parentID;

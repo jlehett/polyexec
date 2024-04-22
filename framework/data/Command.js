@@ -1,6 +1,11 @@
 import Loggable from './extensions/Loggable.js';
 import ProcessManager from '../services/ProcessManager.js';
 import StdErrMessageHandler from './modules/StdErrMessageHandler.js';
+import InfoLog from '../../connection/logs/InfoLog.js';
+import WarningLog from '../../connection/logs/WarningLog.js';
+import ErrorMessageLog from '../../connection/logs/ErrorMessageLog.js';
+import SysCallErrorLog from '../../connection/logs/SysCallErrorLog.js';
+import RestartingLog from '../../connection/logs/RestartingLog.js';
 
 //#region Config
 
@@ -12,7 +17,7 @@ export const config = {
 
 class Command extends Loggable {
     constructor(commandString) {
-        super();
+        super({ type: 'Command' });
 
         this.commandString = commandString;
         
@@ -27,14 +32,14 @@ class Command extends Loggable {
     async runWithCwd(cwd, parentID, onErrorEncountered) {
         //#region Helper Closures
 
-        const onInfo = (message, opts) => this.infoLog(parentID, message, opts);
+        const onInfo = (message, opts) => this.sendLog(InfoLog, { parentID, message, ...opts });
 
         const onError = (message) => {
-            this.errorMessageLog(parentID, message);
+            this.sendLog(ErrorMessageLog, { parentID, message });
             onErrorEncountered?.();
         };
 
-        const onWarning = (message) => this.warningMessageLog(parentID, message);
+        const onWarning = (message) => this.sendLog(WarningLog, { parentID, message });
 
         //#endregion
 
@@ -61,7 +66,7 @@ class Command extends Loggable {
                                 return onWarning(message);
                             case LOG_OVERRIDES.RUNNING:
                                 onInfo(message, { isRunning: true });
-                                return this.restartingLog(parentID);
+                                return this.sendLog(RestartingLog, { parentID });
                         }
                     })
 
@@ -104,10 +109,10 @@ class Command extends Loggable {
                 });
 
             });
-        } catch (err) {
-            this.sysCallErrorLog(parentID, err);
+        } catch (error) {
+            this.sendLog(SysCallErrorLog, { parentID, error });
 
-            throw err;
+            throw error;
         }
     }
 

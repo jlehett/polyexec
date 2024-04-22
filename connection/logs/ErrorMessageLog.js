@@ -8,7 +8,7 @@ class ErrorMessageLog extends Log {
             && Boolean(this.errorMessage?.trim?.());
     }
 
-    constructor(parentID, errorMessage) {
+    constructor({ parentID, errorMessage } = {}) {
         super();
 
         this.parentID = parentID;
