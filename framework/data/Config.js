@@ -1,13 +1,16 @@
 import Json from '../services/Json.js';
 import ConfigVar from './ConfigVar.js';
-import { config as commandConfig } from './Command.js';
 
 class Config {
     constructor(configPath, { shell } = {}) {
         this.configPath = configPath;
 
-        commandConfig.shell = shell ?? true;
+        Config.commandConfig.shell = shell ?? true;
     }
+
+    static commandConfig = {
+        shell: true,
+    };
 
     static create(configPath) {
         return new Config(configPath);

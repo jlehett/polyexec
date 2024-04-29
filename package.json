@@ -13,6 +13,7 @@
   "dependencies": {
     "electron": "^24.3.1",
     "kill-sync": "^1.0.3",
+    "lodash": "^4.17.21",
     "vite": "^4.3.2",
     "ws": "^8.16.0"
   },

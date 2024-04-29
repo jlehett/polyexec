@@ -142,6 +142,8 @@ function useChildLogs(groupID, setGroupStatus) {
     const [childLogs, setChildLogs] = useState([]);
 
     useOnEmit(LogStore.EVENTS.LOG_ADDED, (log) => {
+        const addLogToChildren = () => setChildLogs((logsInGroup) => [...logsInGroup, log]);
+
         if (!isChildOfGroup(groupID, log)) return;
 
         switch (log.type) {
@@ -150,17 +152,18 @@ function useChildLogs(groupID, setGroupStatus) {
                 break;
             case ErrorMessageLog.type:
                 setGroupStatus(STATUS.ERROR);
+                addLogToChildren();
                 break;
             case InfoLog.type: {
                 if (log.isSuccess) {
                     setGroupStatus(setSuccessIfNotAlreadyError);
                 }
 
-                setChildLogs((logsInGroup) => [...logsInGroup, log]);
+                addLogToChildren();
                 break;
             }
             default:
-                setChildLogs((logsInGroup) => [...logsInGroup, log]);
+                addLogToChildren();
         }
     });
 
