@@ -1,22 +1,16 @@
 
-class Task extends Loggable {
+class Task {
     constructor({ name, onRun }) {
-        super({ name, type: 'Task' });
-
         this.name = name;
-        this.onRun = onRun;
+        this.run = onRun;
     }
 
     static create({ name, onRun }) {
         return new Task({ name, onRun });
     }
 
-    async run(...args) {
-        try {
-            await this.onRun(args);
-        } catch (err) {
-            console.log('\x1b[31m%s\x1b[0m', `Error while running Task: ${err}`);
-        }
+    onError(err) {
+        console.log('\x1b[31m%s\x1b[0m', `Error while running Task: ${err}`);
     }
 }
 
