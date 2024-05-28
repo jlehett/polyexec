@@ -3,8 +3,8 @@ import isUndefined from 'lodash/isUndefined';
 import TaskStartingLog from '../../connection/logs/TaskStartingLog.js';
 import TaskEndingLog from '../../connection/logs/TaskEndingLog.js';
 import TaskErroredLog from '../../connection/logs/TaskErroredLog.js';
+import { extend, InitModule } from '../../utils/class';
 import {
-    throwIf,
     not,
     modifyFn,
     setWhileRunning,
@@ -12,54 +12,68 @@ import {
     onTry,
     onFinally,
     callback,
+    validate,
+    callInSeries,
 } from '../../utils/functional';
 
 class TaskManager extends Loggable {
     
     constructor() {
         super({ type: 'TaskManager' });
+        extend(this, InitModule);
 
-        this.tasksByName = new Map();
-        this.runningTask = null;
-    }
-    
-    addTask(task) {
-        throwIf(not(isUndefined))
-            (`Task with name ${task.name} already exists.`)
-            (this.getTaskByName(task.name));
-
-        this.tasksByName.set(task.name, task);
+        this.initVars({
+            tasksByName: new Map(),
+            runningTask: null,
+        });
     }
 
-    getTasks() {
-        return this.tasksByName.values();
-    }
+    //#region Public Functions
 
-    getTaskByName(name) {
-        return this.tasksByName.get(name);
-    }
-    
-    async runTask(name) {
-        const task = throwIf(isUndefined)
-            (`Task with name ${name} not found.`)
-            (this.getTaskByName(name));
+    getTasks = () => this.tasksByName.values();
 
-        throwIf(not(isNull))
-            (`Task ${this.runningTask.name} is already running.`)
-            (this.runningTask);
+    getTaskByName = (name) => this.tasksByName.get(name);
 
-        {
-            const sendTaskLog = this.#sendLogForTask(task);
+    addTask = (task) => callInSeries(
+        callback(validate, this.#validations.taskDoesNotExist(task?.name)),
+        callback(this.tasksByName.set, task.name, task)
+    );
 
-            modifyFn(
-                task.run,
-                setWhileRunning(this, 'runningTask', task),
-                onTry(sendTaskLog(TaskStartingLog)),
-                onCatch(sendTaskLog(TaskErroredLog)),
-                onFinally(sendTaskLog(TaskEndingLog))
-            )();
-        }
-    }
+    runTask = (task) => callInSeries(
+        callback(
+            validate,
+            this.#validations.taskExists(task?.name),
+            this.#validations.noTaskRunning,
+        ),
+        modifyFn(
+            task.run,
+            setWhileRunning(this, 'runningTask', task),
+            onTry(this.#sendLogForTask(task)(TaskStartingLog)),
+            onCatch(this.#sendLogForTask(task)(TaskErroredLog)),
+            onFinally(this.#sendLogForTask(task)(TaskEndingLog))
+        )
+    );
+
+    //#endregion
+
+    //#region Validations
+
+    #validations = {
+        taskExists: (name) => ({
+            cond: () => not(isUndefined)(name) && not(isUndefined)(this.getTaskByName(name)),
+            notMetMsg: `Task with name ${name} not found.`,
+        }),
+        taskDoesNotExist: (name) => ({
+            cond: () => not(isUndefined)(name) && isUndefined(this.getTaskByName(name)),
+            notMetMsg: `Task with name ${name} already exists.`,
+        }),
+        noTaskRunning: () => ({
+            cond: () => isNull(this.runningTask),
+            notMetMsg: `Task ${this.runningTask.name} is already running.`,
+        }),
+    };
+
+    //#endregion
 
     //#region Private Functions
     

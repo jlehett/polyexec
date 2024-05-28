@@ -7,4 +7,6 @@ export default (conditionOrValue) => (errorMessage) => (value) => {
         default:
             if (value === conditionOrValue) throw new Error(errorMessage);
     }
+
+    return value;
 }
