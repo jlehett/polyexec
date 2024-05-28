@@ -1,7 +1,7 @@
 import map from 'lodash/map';
 import throwIf from './throwIf.js';
 
-export default validate = (...validations) => map(
+export default (...validations) => map(
     validations,
-    (validation) => throwIf(validation.cond())(validation.notMetMsg)(true),
+    validation => throwIf({ cond: !validation.cond, errMsg: validation.notMetMsg })
 );

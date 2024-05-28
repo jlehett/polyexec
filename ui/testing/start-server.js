@@ -3,6 +3,7 @@ import ValueRequest from '../../connection/requests/ValueRequest.js';
 import InfoLog from '../../connection/logs/InfoLog.js';
 import StartingLog from '../../connection/logs/StartingLog.js';
 import ErrorMessageLog from '../../connection/logs/ErrorMessageLog.js';
+import TaskVisibilityLog from '../../connection/logs/TaskVisibilityLog.js';
 import DataStream from '../../framework/services/DataStream.js';
 
 const dataStream = new DataStream({ port: 21734 });
@@ -56,6 +57,18 @@ rl.on('line', (line) => {
             } else {
                 console.log('Invalid root log ID.');
             }
+            break;
+        case 'createTask':
+            if (!command[1]) {
+                console.log('Task name required.');
+            } else {
+                dataStream.sendRequest(new TaskVisibilityLog({
+                    id: '123',
+                    name: command[1],
+                    shouldShow: true,
+                }));
+            }
+            break;
         default:
             console.log('Unknown command.');
             break;

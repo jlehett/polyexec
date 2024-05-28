@@ -5,6 +5,7 @@ import RequestHandler from '@components/request-handler/RequestHandler';
 import ErrorTracker from '@components/error-tracker/ErrorTracker';
 import ConfigDisplay from '@components/config-display/ConfigDisplay';
 import Logs from '@components/logs/Logs';
+import Tasks from '@components/tasks/Tasks';
 
 function Dashboard() {
     useEffect(() => {
@@ -22,6 +23,9 @@ function Dashboard() {
             </div>
             <div className={localStyles.rightSide}>
                 <ConfigDisplay/>
+            </div>
+            <div className={localStyles.bottom}>
+                <Tasks/>
             </div>
         </div>
     );

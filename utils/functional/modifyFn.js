@@ -1,16 +1,13 @@
-import reduce from 'lodash/reduce';
 import map from 'lodash/map';
-import callback from './callback';
-import safeCall from './safeCall';
 
 export default (fn, ...modifiers) => async (...args) => {
     try {
-        map(modifiers, modifier => safeCall(modifier.onTry)());
+        map(modifiers, modifier => modifier.onTry?.());
         return await fn(...args);
     } catch (err) {
-        map(modifiers, modifier => safeCall(modifier.onCatch)(err));
+        map(modifiers, modifier => modifier.onCatch?.(err));
     } finally {
-        map(modifiers, modifier => safeCall(modifier.onFinally)());
+        map(modifiers, modifier => modifier.onFinally?.());
     }
 }
 
@@ -19,6 +16,6 @@ export const onCatch = (...fns) => map(fns, fn => ({ onCatch: fn }));
 export const onFinally = (...fns) => map(fns, fn => ({ onFinally: fn }));
 
 export const setWhileRunning = (object, propPath, value) => ({
-    onTry: callback(set, object, propPath, value),
-    onFinally: callback(set, object, propPath, undefined)
+    onTry: () => set(object, propPath, value),
+    onFinally: () => set(object, propPath, undefined),
 });

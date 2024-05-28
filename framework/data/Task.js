@@ -15,15 +15,17 @@ class Task extends Loggable {
         this.createGetterSetters({ shouldShow });
     }
 
-    static create({ name, onRun }) {
-        return new Task({ name, onRun });
+    static create({ name, onRun, shouldShow }) {
+        const task = new Task({ name, onRun, shouldShow });
+        task.#sendVisibilityLog({ shouldShow });
+        return task;
     }
 
     //#region Overrides
 
     set shouldShow(value) {
         this.setter({ shouldShow: value });
-        this.sendLog(TaskVisibilityLog, { shouldShow: value });
+        this.#sendVisibilityLog({ shouldShow: value });
     }
 
     //#endregion
@@ -33,6 +35,12 @@ class Task extends Loggable {
     onError(err) {
         console.log('\x1b[31m%s\x1b[0m', `Error while running Task: ${err}`);
     }
+
+    //#endregion
+
+    //#region Private Functions
+
+    #sendVisibilityLog = ({ shouldShow }) => this.sendLog(TaskVisibilityLog, { shouldShow });
 
     //#endregion
 }

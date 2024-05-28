@@ -5,14 +5,16 @@ class TaskVisibilityLog extends Log {
 
     get isValid() {
         return ![null, undefined].includes(this.id) &&
-            Boolean(this.name)
+            Boolean(this.name) &&
+            ![null, undefined].includes(this.shouldShow);
     }
 
-    constructor({ id, name } = {}) {
+    constructor({ id, name, shouldShow } = {}) {
         super();
 
         this.id = id;
         this.name = name;
+        this.shouldShow = shouldShow;
     }
 
     toJSON() {
@@ -20,6 +22,7 @@ class TaskVisibilityLog extends Log {
             ...super.toJSON(),
             id: this.id,
             name: this.name,
+            shouldShow: this.shouldShow,
         };
     }
 }

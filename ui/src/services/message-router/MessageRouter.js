@@ -5,7 +5,9 @@ import Log from '../../../../connection/Log';
 import ConfigVar from '../../../../connection/ConfigVar';
 import RequestHandler from '../request-handler/RequestHandler';
 import LogStore from '../log-store/LogStore';
+import TaskTracker from '../task-tracker/TaskTracker';
 import ConfigVarStore from '../config-var-store/ConfigVarStore';
+import TaskVisibilityLog from '../../../../connection/logs/TaskVisibilityLog';
 
 //#region Config
 
@@ -60,6 +62,9 @@ class MessageRouter {
         switch (message.superType) {
             case Log.superType:
                 LogStore.add(message);
+                if (message.type === TaskVisibilityLog.type) {
+                    TaskTracker.processTaskVisibilityLog(message);
+                }
                 break;
             case Request.superType:
                 RequestHandler.receive(message);
