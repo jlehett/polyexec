@@ -35,18 +35,24 @@ rl.on('line', (line) => {
             dataStream.sendRequest(new ValueRequest({ message: 'Enter thing', recommendedOptions: ['risks', 'audits', 'processes'] }));
             break;
         case 'rootLog':
-            dataStream.sendLog(new StartingLog('New Root', String(++numRootLogs), null));
+            dataStream.sendLog(new StartingLog({ name: 'New Root', id: String(++numRootLogs) }));
             break;
         case 'log':
             if (command[1] <= numRootLogs && command[1] > 0) {
-                dataStream.sendLog(new InfoLog(command[1], command.slice(2).join(' ')));
+                dataStream.sendLog(new InfoLog({
+                    parentID: command[1],
+                    message: command.slice(2).join(' '),
+                }));
             } else {
                 console.log('Invalid root log ID.');
             }
             break;
         case 'error':
             if (command[1] <= numRootLogs && command[1] > 0) {
-                dataStream.sendLog(new ErrorMessageLog(command[1], command.slice(2).join(' ')));
+                dataStream.sendLog(new ErrorMessageLog({
+                    parentID: command[1],
+                    errorMessage: command.slice(2).join(' '),
+                }));
             } else {
                 console.log('Invalid root log ID.');
             }
